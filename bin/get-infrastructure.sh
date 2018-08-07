@@ -10,9 +10,32 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
-if ! [ -x "$(command -v python2.7)" ]; then
-    echo 'Error: python2.7 is not installed.' >&2
-    exit 1
+if ! [ -x "$(command -v python3)" ]; then
+    PYTHON_VERSION=3.7.0
+    echo 'Error: ${PYTHON_VERSION} is not installed.' >&2
+    sudo yum -y groupinstall "development tools"
+    sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
+    # Build up Python 3.7
+    cd /usr/src
+    sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
+    sudo tar xzf Python-${PYTHON_VERSION}.tgz
+    cd /usr/src/Python-${PYTHON_VERSION}
+    sudo ./configure --enable-optimizations
+    sudo make install
+    cd /usr/src
+    sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
+    sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
+
+    # Build up Python 3.7 Links so it's easy to find it
+    sudo ln -s /usr/local/bin/python3.7 /usr/bin/python3.7
+    sudo ln -s /usr/local/bin/python3.7 /usr/bin/python3
+    sudo ln -s /usr/local/bin/pip3.7 /usr/bin/pip3.7
+    sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
+    sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3.7
+    sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3
+    # Update pip and install pipenv
+    sudo pip3 install -qq --upgrade pip
+    sudo pip3 install -qq pipenv
 fi
 
 if ! [ -x "$(command -v git)" ]; then
@@ -20,14 +43,9 @@ if ! [ -x "$(command -v git)" ]; then
     sudo yum install -y git
 fi
 
-if ! [ -x "$(command -v pip)" ]; then
-    echo "Installing python pip"
-    curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
-fi
-
 # "Ensuring that we can connect to github over ssh"
 ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
 
-pip install --no-cache-dir --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+pip3 install --no-cache-dir --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 
 create_or_update_ami.py $@
