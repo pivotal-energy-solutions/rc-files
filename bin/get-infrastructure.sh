@@ -39,7 +39,7 @@ ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/kno
 #sudo ls -altr /root/.ssh/authorized_keys
 
 echo "Installing private repo"
-pip install --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+pip install --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 
 #echo "Removing private repo"
 #sudo ls /root/.ssh/authorized_keys.$$ > /dev/null && sudo mv /root/.ssh/authorized_keys.$$ /root/.ssh/authorized_keys
