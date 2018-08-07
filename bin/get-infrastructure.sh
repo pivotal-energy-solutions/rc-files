@@ -26,13 +26,16 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-
+echo "Ensuring that we can connect to github over ssh"
 sudo ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> /root/.ssh/known_hosts 2>/dev/null
 
+echo "Ensuring that we can connect to private repo"
 sudo ls /root/.ssh/authorized_keys >/dev/null && \
     sudo mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.$$ && \
     sudo cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys
 
+echo "Installing private repo"
 sudo pip install git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 
+echo "Removing private repo"
 sudo ls /root/.ssh/authorized_keys.$$ > /dev/null && sudo mv /root/.ssh/authorized_keys.$$ /root/.ssh/authorized_keys
