@@ -26,6 +26,13 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-ssh-keygen -F github.com >/dev/null || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+sudo ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> /root/.ssh/known_hosts 2>/dev/null
+
+sudo ls /root/.ssh/authorized_keys >/dev/null && \
+    sudo mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.$$ && \
+    sudo cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys
 
 sudo pip install git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+
+sudo ls /root/.ssh/authorized_keys.$$ > /dev/null && sudo mv /root/.ssh/authorized_keys.$$ /root/.ssh/authorized_keys
