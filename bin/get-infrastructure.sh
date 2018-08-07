@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This will pull the infrastructure module and install it
-# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -c beta
+# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -c beta
 
 echo "Building the stack"
 
@@ -25,11 +25,9 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-echo "Ensuring that we can connect to github over ssh"
+# "Ensuring that we can connect to github over ssh"
 ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
 
 pip install --no-cache-dir --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
-
-echo "Args: $@"
 
 create_or_update_ami.py $@
