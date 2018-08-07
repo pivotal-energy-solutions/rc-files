@@ -3,7 +3,6 @@
 # This will pull the infrastructure module and install it
 # curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -c beta
 
-
 if ! [ -x "$(command -v sudo)" ]; then
     echo 'Error: sudo is not installed.' >&2
     exit 1
