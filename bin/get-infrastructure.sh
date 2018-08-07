@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This will pull the infrastructure module and install it
-# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh
+# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -c beta
 
 echo "Building the stack"
 
@@ -28,7 +28,7 @@ fi
 echo "Ensuring that we can connect to github over ssh"
 ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
 
-pip install --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+pip install --no-cache-dir --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 
 echo "Args: $@"
 
