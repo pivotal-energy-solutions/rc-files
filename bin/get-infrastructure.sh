@@ -17,7 +17,7 @@ fi
 
 if ! [ -x "$(command -v git)" ]; then
     echo "Installing git"
-    yum install -y git
+    sudo yum install -y git
 fi
 
 
