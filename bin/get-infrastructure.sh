@@ -33,15 +33,16 @@ if ! [ -x "$(command -v python3)" ]; then
     sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
     sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3.7
     sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3
-    # Update pip and install pipenv
-    sudo pip3 install -qq --upgrade pip
-    sudo pip3 install -qq pipenv
 fi
 
 if ! [ -x "$(command -v git)" ]; then
     echo "Installing git"
     sudo yum install -y git
 fi
+
+# Update pip and install pipenv
+sudo pip3 install -qq --upgrade pip
+sudo pip3 install -qq --upgrade pipenv
 
 # "Ensuring that we can connect to github over ssh"
 ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
