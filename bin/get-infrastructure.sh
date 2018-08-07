@@ -26,7 +26,7 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-if ! [ $(ssh-keygen -F github.com) ]; then
+if ! [ -x "$(ssh-keygen -F github.com)" ]; then
     echo "Generating.."
     ssh-keyscan github.com >> ~/.ssh/known_hosts
 fi
