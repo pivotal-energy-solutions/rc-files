@@ -26,4 +26,9 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-sudo pip install git+ssh://git\@github.com:pivotal-energy-solutions/tensor-infrastructure.git#egg=infrastructure
+if ! [ $(ssh-keygen -F github.com) ]; then
+    echo "Generating.."
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+fi
+
+#sudo pip install git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
