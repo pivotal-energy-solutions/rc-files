@@ -20,7 +20,6 @@ if ! [ -x "$(command -v git)" ]; then
     sudo yum install -y git
 fi
 
-
 if ! [ -x "$(command -v pip)" ]; then
     echo "Installing python pip"
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
@@ -30,3 +29,7 @@ echo "Ensuring that we can connect to github over ssh"
 ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
 
 pip install --upgrade --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+
+echo "Args: $@"
+
+create_or_update_ami.py $@
