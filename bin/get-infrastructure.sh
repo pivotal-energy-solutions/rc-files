@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This will pull the infrastructure module and install it
-# curl --silent --show-error --retry 5 https://raw.githubusercontent.com/pivotal-energy-solutions/rc-files/master/bin/get-infrastructure.sh | sh
+# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh
 
 echo "Building the stack"
 
@@ -26,4 +26,4 @@ if ! [ -x "$(command -v pip)" ]; then
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
 fi
 
-sudo pip install git+ssh://git@github.com:pivotal-energy-solutions/tensor-infrastructure.git#egg=infrastructure
+sudo pip install git+ssh://git\@github.com:pivotal-energy-solutions/tensor-infrastructure.git#egg=infrastructure
