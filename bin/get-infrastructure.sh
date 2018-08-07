@@ -35,6 +35,7 @@ sudo ls /root/.ssh/authorized_keys >/dev/null && \
     sudo cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys
 
 sudo cat /root/.ssh/authorized_keys
+sudo ls -altr /root/.ssh/authorized_keys
 
 echo "Installing private repo"
 sudo pip install git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
@@ -42,3 +43,4 @@ sudo pip install git+ssh://git@github.com/pivotal-energy-solutions/tensor-infras
 echo "Removing private repo"
 sudo ls /root/.ssh/authorized_keys.$$ > /dev/null && sudo mv /root/.ssh/authorized_keys.$$ /root/.ssh/authorized_keys
 sudo cat /root/.ssh/authorized_keys
+sudo ls -altr /root/.ssh/authorized_keys
