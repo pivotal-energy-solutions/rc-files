@@ -1,0 +1,18 @@
+ [Unit]
+ Description=Splunk Enterprise 7.x
+ Wants=network.target
+
+ [Service]
+ Type=forking
+ RemainAfterExit=False
+ User=splunk
+ Group=splunk
+ LimitNOFILE=65536
+ ExecStart=/opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt
+ ExecStop=/opt/splunk/bin/splunk stop
+ PIDFile=/opt/splunk/var/run/splunk/splunkd.pid
+ Restart=on-failure
+
+ [Install]
+ WantedBy=multi-user.target
+ Alias=splunk.service
