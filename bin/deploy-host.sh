@@ -20,6 +20,10 @@ if ! [ -x "$(command -v pip3)" ]; then
     exit 1
 fi
 
-pip3 install -qq --upgrade --no-cache-dir --user git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+if ! [ $(id -u) = 0 ]; then
+    sudo pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+else
+    pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+fi
 
 deploy_host.py $@
