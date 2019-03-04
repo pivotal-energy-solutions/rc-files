@@ -42,12 +42,11 @@ fi
 sudo pip3 install -qq --upgrade pip
 sudo pip3 install -qq --upgrade pipenv
 
-# "Ensuring that we can connect to github over ssh"
-ssh-keygen -F github.com >/dev/null || sudo ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-
 if ! [ $(id -u) = 0 ]; then
-    sudo -H pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+    sudo -HE ssh-keygen -F github.com >/dev/null || sudo -HE ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+    sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 else
+    ssh-keygen -F github.com >/dev/null || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
     pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 fi
 
