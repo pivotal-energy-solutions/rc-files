@@ -51,3 +51,4 @@ else
 fi
 
 create_or_update_ami.py $@
+create_or_update_ami.py -r $@
