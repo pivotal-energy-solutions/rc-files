@@ -38,7 +38,7 @@ if ! [ -x "$(command -v git)" ]; then
     sudo yum install -y git
 fi
 
-# Update pip and install pipenv
+# Update pip and install pipenv and uwsgi
 sudo pip3 install -qq --upgrade pip
 sudo pip3 install -qq --upgrade pipenv
 sudo pip3 install -qq --upgrade uwsgi
@@ -52,5 +52,8 @@ else
 fi
 
 create_or_update_ami.py $@
-read -n 1 -s -r -p "Install Complete -- Press any key to continue"
-create_or_update_ami.py -r $@
+
+if [ $? -eq 0 ] ; then
+    read -n 1 -s -r -p "Install Complete -- Press any key to continue"
+    create_or_update_ami.py -r $@
+fi
