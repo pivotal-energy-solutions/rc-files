@@ -41,6 +41,7 @@ fi
 # Update pip and install pipenv
 sudo pip3 install -qq --upgrade pip
 sudo pip3 install -qq --upgrade pipenv
+sudo pip3 install -qq --upgrade uwsgi
 
 if ! [ $(id -u) = 0 ]; then
     sudo -HE ssh-keygen -F github.com >/dev/null || sudo -HE ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
@@ -51,4 +52,5 @@ else
 fi
 
 create_or_update_ami.py $@
+read -n 1 -s -r -p "Install Complete -- Press any key to continue"
 create_or_update_ami.py -r $@
