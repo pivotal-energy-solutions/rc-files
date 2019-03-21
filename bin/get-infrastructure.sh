@@ -54,6 +54,5 @@ fi
 create_or_update_ami.py $@
 
 if [ $? -eq 0 ] ; then
-    read -n 1 -s -r -p "Install Complete -- Press any key to continue"
     create_or_update_ami.py -r $@
 fi
