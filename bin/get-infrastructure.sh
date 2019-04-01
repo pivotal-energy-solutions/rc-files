@@ -59,7 +59,10 @@ if [ $? -eq 0 ] ; then
     echo " Install Complete!!"
     echo ""
     echo ""
-    read -rsn1 -p"Press any key to continue"
-    echo ""
-    create_or_update_ami.py -r --no-verify $@
+    read -p "Shall we remove it [Yn]:" ans_yn
+    case "$ans_yn" in
+        [Yy]) create_or_update_ami.py -r --no-verify $@;;
+
+         *) exit 3;;
+    esac
 fi
