@@ -59,6 +59,7 @@ if [ $? -eq 0 ] ; then
     echo " Install Complete!!"
     echo ""
     echo ""
-    read -n 1 -s -r -p "Press any key to continue"
+    read -rsn1 -p"Press any key to continue"
+    echo ""
     create_or_update_ami.py -r --no-verify $@
 fi
