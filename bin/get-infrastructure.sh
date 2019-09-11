@@ -8,7 +8,7 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
-if [ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]; then
+if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
   echo -n "\$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID) and or "
   echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
   echo "Ensure you have run update_hosts.py before ssh'ing in and those vars are in your environ."
@@ -63,7 +63,7 @@ else
     pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 fi
 
-create_or_update_ami.py $@
+create_or_update_ami.py "$@"
 
 if [ $? -eq 0 ] ; then
     echo ""
