@@ -10,9 +10,9 @@ fi
 
 if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
   echo -n "\$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID) and or "
-  echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
-  echo "Ensure you have run update_hosts.py before ssh'ing in and those vars are in your environ."
-  return 255
+  echo "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
+  echo "  - Ensure you have run update_hosts.py before ssh'ing in and those vars are in your environ."
+  exit 255
 fi
 
 if ! [ -x "$(command -v python3)" ]; then
@@ -43,6 +43,10 @@ fi
 if ! [ -x "$(command -v git)" ]; then
     echo "Git is not Installing"
     sudo yum install -y git
+fi
+
+if [ -z "${SSH_AUTH_SOCK}" ] ; then
+  echo "Warning:  No SSH_AUTH_SOCK Found!!"
 fi
 
 # Update pip and install pipenv and uwsgi
