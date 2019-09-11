@@ -9,7 +9,7 @@ if ! [ -x "$(command -v sudo)" ]; then
 fi
 
 if ! [ -x "$(command -v python3)" ]; then
-    PYTHON_VERSION=3.7.0
+    PYTHON_VERSION=3.7.4
     echo '${PYTHON_VERSION} is not installed.' >&2
     sudo yum -y groupinstall "development tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
@@ -42,6 +42,9 @@ fi
 sudo pip3 install -qq --upgrade pip
 sudo pip3 install -qq --upgrade pipenv
 sudo pip3 install -qq --upgrade uwsgi
+
+# Ensure we are good with github
+ssh-keyscan github.com > ~/.ssh/known_hosts
 
 if ! [ $(id -u) = 0 ]; then
     sudo -HE ssh-keygen -F github.com >/dev/null || sudo -HE ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
