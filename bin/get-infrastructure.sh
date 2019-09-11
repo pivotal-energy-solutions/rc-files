@@ -12,6 +12,7 @@ if [ -z "AWS_ACCESS_KEY_ID" || -z "AWS_SECRET_ACCESS_KEY" ]; then
   echo -n "\$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID) and or "
   echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
   echo "Ensure you have run update_hosts.py before ssh'ing in and those vars are in your environ."
+  return 255
 endif
 
 if ! [ -x "$(command -v python3)" ]; then
