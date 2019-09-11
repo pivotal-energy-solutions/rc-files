@@ -46,13 +46,13 @@ sudo pip3 install -qq --upgrade uwsgi
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
     sudo -HE ssh-keygen -F github.com > /dev/null 2>&1 || \
-      sudo -HE ssh-keyscan github.com > $$.ssh && \
+      sudo -HE ssh-keyscan github.com > $$.ssh 2> /dev/null && \
       sudo mv $$.ssh /root/.ssh/known_hosts && \
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
     sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 else
-    ssh-keygen -F github.com 2>/dev/null || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+    ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
     pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 fi
 
