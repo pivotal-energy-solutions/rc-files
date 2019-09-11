@@ -44,6 +44,8 @@ sudo pip3 install -qq --upgrade pipenv
 sudo pip3 install -qq --upgrade uwsgi
 
 # Ensure we are good with github
+value=$(grep -Fx "github.com" ~/.ssh/known_hosts >/dev/null)
+echo "value"
 if ! [ $(grep -Fx "github.com" ~/.ssh/known_hosts >/dev/null) = 0 ]; then
   ssh-keyscan github.com > ~/.ssh/known_hosts
   chmod 640 ~/.ssh/known_hosts
