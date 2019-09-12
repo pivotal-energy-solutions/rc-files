@@ -11,7 +11,7 @@ fi
 # We need to make sure that we allow these couple keys to be passed to our host.
 _SSHD_INCORRECT=0
 sudo grep -P '^AcceptEnv\s+(?=.*AWS_ACCESS_KEY_ID)(?=.*AWS_SECRET_ACCESS_KEY)(?=.*EC2_REGION)' /etc/ssh/sshd_config > /dev/null
-if [ $? -nq 0 ] ; then
+if [ $? -ne 0 ] ; then
   _SSHD_INCORRECT=1
   echo ""
   echo "Warning: SSHD is not accepting of SendEnv Keys - Fixing"
