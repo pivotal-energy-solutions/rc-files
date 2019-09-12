@@ -8,13 +8,31 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
+# We need to make sure that we allow these couple keys to be passed to our host.
+_SSHD_INCORRECT=0
+sudo grep -P '^AcceptEnv\s+(?=.*AWS_ACCESS_KEY_ID)(?=.*AWS_SECRET_ACCESS_KEY)(?=.*EC2_REGION)' /etc/ssh/sshd_config > /dev/null
+if [ $? -nq 0 ] ; then
+  _SSHD_INCORRECT=1
+  echo ""
+  echo "Warning: SSHD is not accepting of SendEnv Keys - Fixing"
+  echo "" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "AcceptEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  sudo systemctl restart sshd
+  echo "  Corrected.  A re-login will be required"
+fi
+
 _MISSING_KEYS=0
 if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$EC2_REGION" ]; then
   echo ""
-  echo  "Error:  One or more of the following environment variables is not set: "
-  echo -n "   \AWS_ACCESS_KEY_ID [$AWS_ACCESS_KEY_ID], "
-  echo -n "\AWS_SECRET_ACCESS_KEY [$AWS_SECRET_ACCESS_KEY], and or "
-  echo "\EC2_REGION [$EC2_REGION]."
+  if [ $_SSHD_INCORRECT = 1 ] ; then echo -n "Warning: "; else echo -n "Error: "; fi
+  echo -n "One or more of the following environment variables "
+  if [ $_SSHD_INCORRECT = 1 ] ; then echo "was not accepted."; else echo "was not passed in."; fi
+  echo -n "   AWS_ACCESS_KEY_ID [$AWS_ACCESS_KEY_ID], "
+  echo -n "AWS_SECRET_ACCESS_KEY [$AWS_SECRET_ACCESS_KEY], and or "
+  echo "EC2_REGION [$EC2_REGION]."
+  if [ $_SSHD_INCORRECT = 1 ] ; then
+    echo "Ensure they are setup passed in and re-relogin"
+  fi
   _MISSING_KEYS=1
 fi
 
