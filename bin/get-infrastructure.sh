@@ -45,6 +45,7 @@ if [ -z "${SSH_AUTH_SOCK}" ] ; then
   echo "Add the following to or create a ~/.ssh/config and add the following lines to it:"
   echo "Host *"
   echo "  ForwardAgent yes"
+  exit 255
 fi
 
 # Update pip and install pipenv and uwsgi
