@@ -68,17 +68,17 @@ fi
 
 if ! [ -x "$(command -v python3)" ]; then
     PYTHON_VERSION=3.7.4
-    echo '${PYTHON_VERSION} is not installed.' >&2
+    echo '${PYTHON_VERSION} is not installed.'
     sudo yum -y groupinstall "development tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
     # Build up Python 3.7
-    cd /usr/src
+    cd /usr/src || echo "Unable to cd to /usr/src"; exit 255
     sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
     sudo tar xzf Python-${PYTHON_VERSION}.tgz
-    cd /usr/src/Python-${PYTHON_VERSION}
+    cd /usr/src/Python-${PYTHON_VERSION}  || echo "Unable to cd to /usr/src/Python-${PYTHON_VERSION}"; exit 255
     sudo ./configure --enable-optimizations
     sudo make install
-    cd /usr/src
+    cd /usr/src || echo "Unable to cd to /usr/src"; exit 255
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
     sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
 
@@ -104,8 +104,8 @@ sudo pip3 install -qq --upgrade uwsgi
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
     sudo -HE ssh-keygen -F github.com > /dev/null 2>&1 || \
-      sudo -HE ssh-keyscan github.com > $$.ssh 2> /dev/null && \
-      sudo mv $$.ssh /root/.ssh/known_hosts > /dev/null 2>&1 && \
+      sudo -HE ssh-keyscan github.com | tee -a /tmp/$$.ssh 2> /dev/null && \
+      sudo mv /tmp/$$.ssh /root/.ssh/known_hosts > /dev/null 2>&1 && \
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
     sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
