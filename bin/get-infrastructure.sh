@@ -8,6 +8,7 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
+# This is how pulling from a private github repo (using git+ssh) is enabled.
 if [ -z "${SSH_AUTH_SOCK}" ] ; then
   echo "Warning:  No SSH_AUTH_SOCK Found!!"
   echo ""
