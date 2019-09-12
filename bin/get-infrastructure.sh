@@ -9,16 +9,20 @@ if ! [ -x "$(command -v sudo)" ]; then
 fi
 
 _MISSING_KEYS=0
-if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-  echo -n "Warning:  \$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID) and or "
-  echo "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
+if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$EC2_REGION" ]; then
+  echo ""
+  echo  "Error:  One or more of the following environment variables is not set: "
+  echo -n "   \$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID), "
+  echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY), and or"
+  echo -n "\$EC2_REGION ($EC2_REGION)."
   _MISSING_KEYS=1
 fi
 
 # This is how pulling from a private github repo (using git+ssh) is enabled.
 _MISSING_AUTH_SOCK=0
 if [ -z "${SSH_AUTH_SOCK}" ] ; then
-  echo "Warning:  No SSH_AUTH_SOCK Found!!"
+  echo ""
+  echo "Error:  No SSH_AUTH_SOCK Found!!"
   _MISSING_AUTH_SOCK=1
 fi
 
@@ -27,13 +31,13 @@ if [ $_MISSING_KEYS ] || [ $_MISSING_AUTH_SOCK ]; then
   echo -n "Ensure that ssh config has been set up properly.  You need to ensure that "
   if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n "both " ; fi
   if [ $_MISSING_KEYS ] ; then
-    echo -n "'sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION'"
+    echo -n "'sendEnv'"
   fi
   if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n " and " ;fi
   if [ $_MISSING_AUTH_SOCK ] ; then
-    echo -n "''ForwardAgent yes'"
+    echo -n "''ForwardAgent'"
   fi
-  echo -n " is set in your ~/.ssh/config.  To do that create or add to your .ssh/config the following:"
+  echo " is set in your ~/.ssh/config.  To do that create or add to your .ssh/config the following:"
   echo ""
   echo "Host ec2-*"
   if [ $_MISSING_AUTH_SOCK ] ; then echo "  ForwardAgent yes"; fi
