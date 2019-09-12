@@ -13,8 +13,8 @@ if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$EC2_
   echo ""
   echo  "Error:  One or more of the following environment variables is not set: "
   echo -n "   \$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID), "
-  echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY), and or"
-  echo -n "\$EC2_REGION ($EC2_REGION)."
+  echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY), and or "
+  echo "\$EC2_REGION ($EC2_REGION)."
   _MISSING_KEYS=1
 fi
 
@@ -28,7 +28,7 @@ fi
 
 if [ $_MISSING_KEYS ] || [ $_MISSING_AUTH_SOCK ]; then
   echo ""
-  echo -n "Ensure that ssh config has been set up properly.  You need to ensure that "
+  echo -n "You must ensure that "
   if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n "both " ; fi
   if [ $_MISSING_KEYS ] ; then
     echo -n "'sendEnv'"
@@ -42,6 +42,8 @@ if [ $_MISSING_KEYS ] || [ $_MISSING_AUTH_SOCK ]; then
   echo "Host ec2-*"
   if [ $_MISSING_AUTH_SOCK ] ; then echo "  ForwardAgent yes"; fi
   if [ $_MISSING_KEYS ] ; then echo "  sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION"; fi
+  echo ""
+  if [ $_MISSING_KEYS ] ; then echo "Finally put the environment vars in your .env"; fi
   echo ""
   exit 255
 fi
