@@ -8,16 +8,37 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
+_MISSING_KEYS=0
+if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+  echo -n "Warning:  \$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID) and or "
+  echo "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY) is missing and this will fail."
+  _MISSING_KEYS=1
+fi
+
 # This is how pulling from a private github repo (using git+ssh) is enabled.
+_MISSING_AUTH_SOCK=0
 if [ -z "${SSH_AUTH_SOCK}" ] ; then
   echo "Warning:  No SSH_AUTH_SOCK Found!!"
+  _MISSING_AUTH_SOCK=1
+fi
+
+if [ $_MISSING_KEYS ] || [ $_MISSING_AUTH_SOCK ]; then
   echo ""
-  echo -n "Ensure that ssh config has 'ForwardAgent yes' before you ssh to this host."
+  echo -n "Ensure that ssh config has been set up properly.  You need to ensure that "
+  if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n "both " ; fi
+  if [ $_MISSING_KEYS ] ; then
+    echo -n "'sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION'"
+  fi
+  if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n " and " ;fi
+  if [ $_MISSING_AUTH_SOCK ] ; then
+    echo -n "''ForwardAgent yes'"
+  fi
+  echo -n " is set in your ~/.ssh/config.  To do that create or add to your .ssh/config the following:"
   echo ""
-  echo "Add the following to or create a ~/.ssh/config and add the following lines to it:"
+  echo "Host ec2-*"
+  if [ $_MISSING_AUTH_SOCK ] ; then echo "  ForwardAgent yes"; fi
+  if [ $_MISSING_KEYS ] ; then echo "  sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION"; fi
   echo ""
-  echo "Host *"
-  echo "  ForwardAgent yes"
   exit 255
 fi
 
