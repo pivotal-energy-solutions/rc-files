@@ -8,6 +8,18 @@ if ! [ -x "$(command -v sudo)" ]; then
     exit 1
 fi
 
+if [ -z "${SSH_AUTH_SOCK}" ] ; then
+  echo "Warning:  No SSH_AUTH_SOCK Found!!"
+  echo ""
+  echo -n "Ensure that ssh config has 'ForwardAgent yes' before you ssh to this host."
+  echo ""
+  echo "Add the following to or create a ~/.ssh/config and add the following lines to it:"
+  echo ""
+  echo "Host *"
+  echo "  ForwardAgent yes"
+  exit 255
+fi
+
 if ! [ -x "$(command -v python3)" ]; then
     PYTHON_VERSION=3.7.4
     echo '${PYTHON_VERSION} is not installed.' >&2
@@ -36,16 +48,6 @@ fi
 if ! [ -x "$(command -v git)" ]; then
     echo "Git is not Installing"
     sudo yum install -y git
-fi
-
-if [ -z "${SSH_AUTH_SOCK}" ] ; then
-  echo "Warning:  No SSH_AUTH_SOCK Found!!"
-  echo -n "Ensure that ssh config has 'ForwardAgent yes' before you ssh to this host."
-  echo ""
-  echo "Add the following to or create a ~/.ssh/config and add the following lines to it:"
-  echo "Host *"
-  echo "  ForwardAgent yes"
-  exit 255
 fi
 
 # Update pip and install pipenv and uwsgi
