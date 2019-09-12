@@ -26,24 +26,24 @@ if [ -z "${SSH_AUTH_SOCK}" ] ; then
   _MISSING_AUTH_SOCK=1
 fi
 
-if [ $_MISSING_KEYS ] || [ $_MISSING_AUTH_SOCK ]; then
+if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   echo ""
   echo -n "You must ensure that "
-  if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n "both " ; fi
-  if [ $_MISSING_KEYS ] ; then
+  if [ $_MISSING_KEYS = 1 ] && [ $_MISSING_AUTH_SOCK = 1 ]; then echo -n "both " ; fi
+  if [ $_MISSING_KEYS = 1 ] ; then
     echo -n "'sendEnv'"
   fi
-  if [ $_MISSING_KEYS ] && [ $_MISSING_AUTH_SOCK ]; then echo -n " and " ;fi
-  if [ $_MISSING_AUTH_SOCK ] ; then
+  if [ $_MISSING_KEYS = 1 ] && [ $_MISSING_AUTH_SOCK = 1 ]; then echo -n " and " ;fi
+  if [ $_MISSING_AUTH_SOCK = 1 ] ; then
     echo -n "''ForwardAgent'"
   fi
   echo " is set in your ~/.ssh/config.  To do that create or add to your .ssh/config the following:"
   echo ""
   echo "Host ec2-*"
-  if [ $_MISSING_AUTH_SOCK ] ; then echo "  ForwardAgent yes"; fi
-  if [ $_MISSING_KEYS ] ; then echo "  sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION"; fi
+  if [ $_MISSING_AUTH_SOCK = 1 ] ; then echo "  ForwardAgent yes"; fi
+  if [ $_MISSING_KEYS = 1 ] ; then echo "  sendEnv AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY EC2_REGION"; fi
   echo ""
-  if [ $_MISSING_KEYS ] ; then echo "Finally put the environment vars in your .env"; fi
+  if [ $_MISSING_KEYS = 1 ] ; then echo "Finally put the environment vars in your .env"; fi
   echo ""
   exit 255
 fi
