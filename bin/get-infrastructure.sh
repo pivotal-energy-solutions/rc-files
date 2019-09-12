@@ -12,9 +12,9 @@ _MISSING_KEYS=0
 if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$EC2_REGION" ]; then
   echo ""
   echo  "Error:  One or more of the following environment variables is not set: "
-  echo -n "   \$AWS_ACCESS_KEY_ID ($AWS_ACCESS_KEY_ID), "
-  echo -n "\$AWS_SECRET_ACCESS_KEY ($AWS_SECRET_ACCESS_KEY), and or "
-  echo "\$EC2_REGION ($EC2_REGION)."
+  echo -n "   \AWS_ACCESS_KEY_ID [$AWS_ACCESS_KEY_ID], "
+  echo -n "\AWS_SECRET_ACCESS_KEY [$AWS_SECRET_ACCESS_KEY], and or "
+  echo "\EC2_REGION [$EC2_REGION]."
   _MISSING_KEYS=1
 fi
 
