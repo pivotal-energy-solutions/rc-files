@@ -40,7 +40,7 @@ fi
 
 if [ -z "${SSH_AUTH_SOCK}" ] ; then
   echo "Warning:  No SSH_AUTH_SOCK Found!!"
-  echo -n "Ensure that ssh config has both 'ForwardAgent yes' before you ssh to this host."
+  echo -n "Ensure that ssh config has 'ForwardAgent yes' before you ssh to this host."
   echo ""
   echo "Add the following to or create a ~/.ssh/config and add the following lines to it:"
   echo "Host *"
