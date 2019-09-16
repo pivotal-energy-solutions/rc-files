@@ -131,6 +131,5 @@ if [ $? -eq 0 ] ; then
          *) exit 3;;
     esac
 else
-  echo "This completed not good..."
-
+  echo "This FALILED!! -- NOT GOOD!"
 fi
