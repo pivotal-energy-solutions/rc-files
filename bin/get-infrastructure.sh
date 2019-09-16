@@ -113,6 +113,7 @@ else
     pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
 fi
 
+echo "Starting Create or Update AMI"
 create_or_update_ami.py "$@"
 
 if [ $? -eq 0 ] ; then
