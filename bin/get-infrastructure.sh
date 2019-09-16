@@ -69,16 +69,18 @@ fi
 if ! [ -x "$(command -v python3)" ]; then
     PYTHON_VERSION=3.7.4
     echo "Python ${PYTHON_VERSION} is not installed."
-    sudo yum -y install groupinstall "Development Tools" || echo "Unable to install dev tools"; exit 255
+    sudo yum groups mark install "Development Tools"
+    sudo yum groups mark convert "Development Tools"
+    sudo yum -y groupinstall "Development Tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
     # Build up Python 3.7
-    cd /usr/src || echo "Unable to cd to /usr/src"; exit 255
+    cd /usr/src
     sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
     sudo tar xzf Python-${PYTHON_VERSION}.tgz
-    cd /usr/src/Python-${PYTHON_VERSION}  || echo "Unable to cd to /usr/src/Python-${PYTHON_VERSION}"; exit 255
+    cd /usr/src/Python-${PYTHON_VERSION}  || echo "Unable to cd to /usr/src/Python-${PYTHON_VERSION}"
     sudo ./configure --enable-optimizations
     sudo make install
-    cd /usr/src || echo "Unable to cd to /usr/src"; exit 255
+    cd /usr/src || echo "Unable to cd to /usr/src"
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
     sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
 
