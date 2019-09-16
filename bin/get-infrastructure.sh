@@ -69,7 +69,7 @@ fi
 if ! [ -x "$(command -v python3)" ]; then
     PYTHON_VERSION=3.7.4
     echo "Python ${PYTHON_VERSION} is not installed."
-    sudo yum -y groupinstall "development tools"
+    sudo yum -y install groupinstall "Development Tools" || echo "Unable to install dev tools"; exit 255
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
     # Build up Python 3.7
     cd /usr/src || echo "Unable to cd to /usr/src"; exit 255
