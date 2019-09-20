@@ -1,0 +1,8 @@
+[uwsgi]
+uid = 2500
+gid = 2500
+vassal_name = axis
+chdir = /home/pivotal/axis/
+module = wsgi
+
+env = DJANGO_SETTINGS_MODULE=settings.%n
