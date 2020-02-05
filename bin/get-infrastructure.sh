@@ -120,6 +120,8 @@ else
     fi
 fi
 
+sudo touch /usr/local/lib/python3.8/site-packages/infrastructure/utils/logging_utils/.env
+
 echo "Starting Create or Update AMI"
 create_or_update_ami.py "$@"
 
