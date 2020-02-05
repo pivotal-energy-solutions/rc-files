@@ -70,7 +70,6 @@ if ! [ -x "$(command -v python3)" ]; then
     PYTHON_VERSION=3.8.1
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
-    sudo yum groups mark convert "Development Tools"
     sudo yum -y groupinstall "Development Tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
     # Build up Python 3.8
