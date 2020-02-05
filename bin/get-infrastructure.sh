@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This will pull the infrastructure module and install it
-# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -c beta
+# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -a axis -c production -vvv
 
 if ! [ -x "$(command -v sudo)" ]; then
     echo 'Error: sudo is not installed.' >&2
@@ -66,7 +66,7 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-if ! [ -x "$(command -v python3)" ]; then
+if ! [ -x "$(command -v python3.8)" ]; then
     PYTHON_VERSION=3.8.1
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
@@ -109,9 +109,15 @@ if ! [ $(id -u) = 0 ]; then
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
     sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+    if ! [ -f /root/.env ]; then
+      touch /root/.env
+    fi
 else
     ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
     pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+    if ! [ -f ~/.env ]; then
+      touch ~/.env
+    fi
 fi
 
 echo "Starting Create or Update AMI"
