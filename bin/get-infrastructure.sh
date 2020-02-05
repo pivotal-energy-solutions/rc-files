@@ -67,13 +67,13 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
 fi
 
 if ! [ -x "$(command -v python3)" ]; then
-    PYTHON_VERSION=3.7.4
+    PYTHON_VERSION=3.8.1
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
     sudo yum groups mark convert "Development Tools"
     sudo yum -y groupinstall "Development Tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
-    # Build up Python 3.7
+    # Build up Python 3.8
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
     sudo tar xzf Python-${PYTHON_VERSION}.tgz
@@ -84,13 +84,13 @@ if ! [ -x "$(command -v python3)" ]; then
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
     sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
 
-    # Build up Python 3.7 Links so it's easy to find it
-    sudo ln -s /usr/local/bin/python3.7 /usr/bin/python3.7
-    sudo ln -s /usr/local/bin/python3.7 /usr/bin/python3
-    sudo ln -s /usr/local/bin/pip3.7 /usr/bin/pip3.7
+    # Build up Python 3.8 Links so it's easy to find it
+    sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3.8
+    sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3
+    sudo ln -s /usr/local/bin/pip3.8 /usr/bin/pip3.8
     sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
-    sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3.7
-    sudo ln -s /usr/local/bin/easy_install-3.7 /usr/bin/easy_install-3
+    sudo ln -s /usr/local/bin/easy_install-3.8 /usr/bin/easy_install-3.8
+    sudo ln -s /usr/local/bin/easy_install-3.8 /usr/bin/easy_install-3
 fi
 
 if ! [ -x "$(command -v git)" ]; then
