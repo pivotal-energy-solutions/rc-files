@@ -99,7 +99,8 @@ fi
 
 # Update pip and install pipenv and uwsgi
 sudo pip3 install -qq --upgrade pip
-sudo pip3 install -qq --upgrade pipenv
+sudo pip3 install -qq --upgrade virtualenv
+sudo pip3 install -qq --upgrade poetry
 sudo pip3 install -qq --upgrade uwsgi
 
 # Ensure we are good with github
