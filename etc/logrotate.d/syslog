@@ -1,8 +1,17 @@
+/var/log/kernel
+/var/log/kernel.log
 /var/log/cron
+/var/log/cron.log
 /var/log/maillog
+/var/log/maillog.log
 /var/log/messages
+/var/log/messages.log
 /var/log/secure
+/var/log/secure.log
 /var/log/spooler
+/var/log/spooler.log
+/var/log/boot
+/var/log/boot.log
 {
     missingok
     sharedscripts
