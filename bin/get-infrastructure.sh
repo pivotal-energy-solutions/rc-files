@@ -66,8 +66,8 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-PYTHON_BASE_VERSION=3.7
-PYTHON_VERSION=${PYTHON_BASE_VERSION}.7  # 3.7.7
+PYTHON_VERSION=3.7.7
+PYTHON_BASE_VERSION=`echo ${PYTHON_VERSION} | cut -d "." -f 1-2`
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
@@ -85,12 +85,18 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
 
     # Build up Python PYTHON_BASE_VERSION Links so it's easy to find it
-    sudo rm -f /usr/bin/python${PYTHON_BASE_VERSION} && ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
-    sudo rm -f /usr/bin/python3 && ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python3
-    sudo rm -f /usr/bin/pip${PYTHON_BASE_VERSION} && ln -s /usr/local/bin/pip${PYTHON_BASE_VERSION} /usr/bin/pip${PYTHON_BASE_VERSION}
-    sudo rm -f /usr/bin/pip3 && ln -s /usr/local/bin/pip3 /usr/bin/pip3
-    sudo rm -f /usr/bin/easy_install-${PYTHON_BASE_VERSION} && ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
-    sudo rm -f /usr/bin/easy_install-3 && ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
+    sudo rm -f /usr/bin/python${PYTHON_BASE_VERSION}
+    sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
+    sudo rm -f /usr/bin/python3
+    sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python3
+    sudo rm -f /usr/bin/pip${PYTHON_BASE_VERSION}
+    sudo ln -s /usr/local/bin/pip${PYTHON_BASE_VERSION} /usr/bin/pip${PYTHON_BASE_VERSION}
+    sudo rm -f /usr/bin/pip3
+    sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
+    sudo rm -f /usr/bin/easy_install-${PYTHON_BASE_VERSION}
+    sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
+    sudo rm -f /usr/bin/easy_install-3
+    sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
 fi
 
 if ! [ -x "$(command -v git)" ]; then
