@@ -67,7 +67,7 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
 fi
 
 PYTHON_BASE_VERSION=3.7
-PYTHON_VERSION = ${PYTHON_BASE_VERSION}.7  # 3.7.7
+PYTHON_VERSION=${PYTHON_BASE_VERSION}.7  # 3.7.7
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
