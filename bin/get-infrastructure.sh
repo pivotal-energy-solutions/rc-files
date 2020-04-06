@@ -21,6 +21,17 @@ if [ $? != 0 ] ; then
   echo "  Corrected.  A re-login will be required"
 fi
 
+# Make sure the banner is working..
+sudo grep -P '^Banner\s+(?=/etc/issue.net)' /etc/ssh/sshd_config > /dev/null
+if [ $? != 0 ] ; then
+  echo ""
+  echo "Warning: SSHD Banner Not correct - Fixing"
+  echo "" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "Banner /etc/issue.net" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  sudo systemctl restart sshd
+fi
+
+
 _MISSING_KEYS=0
 if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$EC2_REGION" ]; then
   echo ""
