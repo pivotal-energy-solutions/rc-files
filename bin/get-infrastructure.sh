@@ -121,13 +121,13 @@ if ! [ $(id -u) = 0 ]; then
       ssh-keyscan github.com 2> /dev/null | sudo tee -a /root/.ssh/known_hosts > /dev/null && \
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
-    sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+    sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || exit "Issue updating infrastructure"
     if ! [ -f /root/.env ]; then
       sudo touch /root/.env
     fi
 else
     ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-    pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git
+    pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || exit "Issue updating infrastructure"
     if ! [ -f ~/.env ]; then
       touch ~/.env
     fi
