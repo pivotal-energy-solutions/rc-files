@@ -7,10 +7,8 @@
 
 	Founder: Bob B
 
-	Developer: Autumn V
-
 
 /* SITE */
-	Last update: 2016/10/05
+	Last update: LAST_UPDATE
 	Language: English
 	Doctype: HTML5
