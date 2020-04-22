@@ -1,0 +1,12 @@
+/var/log/django/*.json {
+  daily
+  rotate 30
+  create
+  dateext
+  dateyesterday
+  compress
+  delaycompress
+  notifempty
+  missingok
+  su APP_USER APP_GROUP
+}
