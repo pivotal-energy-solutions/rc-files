@@ -1,30 +1,98 @@
 <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>System Error Occurred</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Pivotal Energy Solution">
+        <meta name="author" content="Pivotal Energy Solutions">
+        <meta charset="UTF-8">
 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#c9302c">
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="theme-color" content="#ffffff">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Pivotal Energy Solution">
+        <meta name="author" content="Pivotal Energy Solutions">
+        <meta charset="UTF-8">
+        <link rel="apple-touch-icon" sizes="180x180" href="//apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="//favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="//favicon-16x16.png">
+        <link rel="manifest" href="//site.webmanifest">
+        <link rel="mask-icon" href="//safari-pinned-tab.svg" color="#c9302c">
+        <meta name="msapplication-TileColor" content="#000000">
+        <meta name="theme-color" content="#ffffff">
+        <!-- Google Analytics -->
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-26647319-1']);
+          _gaq.push(['_setDomainName', 'axis.pivotalenergy.net']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </head>
 
-<html>
-<head>
-<title>Error</title>
-<style>
-    body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-</style>
-</head>
-<body>
-<h1>An error occurred.</h1>
-<p>Sorry, the page you are looking for is currently unavailable.<br/>
-Please try again later.</p>
-<p>If you are the system administrator of this resource then you should check
-the <a href="http://nginx.org/r/error_log">error log</a> for details.</p>
-<p><em>Faithfully yours, APPLICATION_TEAM_NAME Team.</em></p>
-</body>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand navbar-brand" href="/" id="brand">&nbsp;</a>
+                <div class="navbar-collapse collapse navbar-responsive-collapse nav-collapse-scrollable">
+                    <ul class="nav navbar-nav">
+                        <li class=" "><a href="/">Home</a></li>
+                        <li class=" dropdown">
+                            <a href="#" None class="dropdown-toggle" data-toggle="dropdown"> Axis <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class=""><a href="/company/public/" class="disabled"> Partner Companies</a></li>
+                            </ul>
+                        </li>
+                        <li class=" "><a href="/contact/" class="disabled"> Contact</a></li>
+                    </ul>
+                    <div class="pull-right"> </div>
+                </div>
+            </div>
+        </div>
+        <div id="content" class="container">
+             <div id="message_area"></div>
+            <div class="row">
+                 <div class="col-md-9">
+                     <header>
+                         <div class="row row-header col-md-12">
+                             <p><span>System Interrupt Occurred</span></p>
+                         </div>
+                     </header>
+                     <div class="row col-md-12" style="min-height: 300px">
+                         <img class="img-rounded pull-right" width="400"
+                              src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/images/homes/winter/main_home.jpg">
+                         <div class="col-md-5 alert alert-danger">
+                             <h4>An error has occurred!</h4>
+			     <strong>We apologize for the interruption and have already been notified.</strong><br /><br />
+                             <p>We should have this resolved shortly.  If you would like to visit our support side click
+				<a href="http://support.pivotalenergysolutions.com" style="text-decoration: underline">here</a>.  <br /><br />
+				Thanks for your patience!</p><br>
+                         </div>
+                     </div>
+                </div>
+                 <div class="col-md-3" style="min-height: 300px">
+                     <div class="well" style="padding-top: 8px;min-height: 300px">
+                     </div>
+                 </div>
+             </div>
+             <hr/>
+             <footer>
+                 <div class="row">
+                     <div class="col-md-3"></div>
+                     <div class="col-md-9">
+                         <p class="text-muted text-right" style="font-size: x-small">
+                             Copyright © 2011-2019 Pivotal Energy Solutions. All Rights Reserved.
+                         </p>
+                     </div>
+                 </div>
+             </footer>
+            <script src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/js/vendor/bootstrap/3.3.2/bootstrap.min.js"></script>
+        </div>
+    </body>
 </html>

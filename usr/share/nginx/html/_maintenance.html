@@ -1,28 +1,80 @@
 <!DOCTYPE html>
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#c9302c">
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="theme-color" content="#ffffff">
-
-<html>
+<html lang="en">
 <head>
-<title>Maintenance</title>
-<style>
-    body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-</style>
+    <title>Maintenance Mode</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pivotal Energy Solution">
+    <meta name="author" content="Pivotal Energy Solutions">
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" sizes="180x180" href="//apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="//favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="//favicon-16x16.png">
+    <link rel="manifest" href="//site.webmanifest">
+    <link rel="mask-icon" href="//safari-pinned-tab.svg" color="#c9302c">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#ffffff">
+
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/bootstrap/3.3.2/bootstrap.min.css?v=1"
+      rel="stylesheet" media="screen">
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/font-awesome/4.4.0/font-awesome.min.css?v=1"
+      rel="stylesheet" media="screen">
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/main.min.css?v=1"
+      rel="stylesheet"
+      media="screen">
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/bootstrap_datatables.min.css?v=1"
+      rel="stylesheet" media="screen">
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/all.min.css"
+      type="text/css"
+      media="screen" rel="stylesheet"/>
+    <link
+      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/select2_modifications.min.css?v=1"
+      rel="stylesheet" media="screen">
 </head>
 <body>
-<h1>Maintenance is happening</h1>
-<p>Sorry, Maintenance happens and you caught us midstream.<br/>
-Please try again later.</p>
-<p><em>Faithfully yours, APPLICATION_TEAM_NAME Team.</em></p>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="brand navbar-brand" href="/" id="brand">&nbsp;</a>
+        <div class="navbar-collapse collapse navbar-responsive-collapse nav-collapse-scrollable">
+            <ul class="nav navbar-nav">
+                <li class=" "><a href="/">Home</a></li>
+            </ul>
+            <div class="pull-right"></div>
+        </div>
+    </div>
+</div>
+<div id="content" class="container">
+    <article style="min-height: 500px">
+        <br/>
+        <h2 class="text-warning text-center">
+            <i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i>
+                &nbsp; &nbsp; Hold tight we are temporarily down for maintenance. &nbsp;&nbsp;
+            <i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i>
+            <br />
+            We'll be back shortly.
+        </h2>
+    </article>
+    <hr/>
+    <footer>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <p class="text-muted text-right" style="font-size: x-small">
+                    Copyright © 2011-2019 Pivotal Energy Solutions. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/js/vendor/bootstrap/3.3.2/bootstrap.min.js"></script>
+</div>
 </body>
 </html>
