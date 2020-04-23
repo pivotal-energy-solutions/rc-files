@@ -5,4 +5,7 @@ vassal_name = axis
 chdir = /home/pivotal/axis/
 module = wsgi
 
+socket = /var/run/uwsgi/uwsgi.sock
+chmod-socket = 666
+
 env = DJANGO_SETTINGS_MODULE=settings.%n
