@@ -1,11 +1,18 @@
 [uwsgi]
+
+virtualenv_path = /home/pivotal/.venv
+chdir = /home/pivotal/
+
 uid = 2500
 gid = 2500
 vassal_name = axis
-chdir = /home/pivotal/axis/
 module = wsgi
 
-socket = /var/run/uwsgi/uwsgi.sock
+# Websocket
+http = 127.0.0.1:8003
+http-to = /run/uwsgi/uwsgi.sock
+
+socket = /run/uwsgi/uwsgi.sock
 chmod-socket = 666
 
 env = DJANGO_SETTINGS_MODULE=settings.%n
