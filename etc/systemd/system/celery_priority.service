@@ -6,6 +6,7 @@ After=network.target
 Type=forking
 User=pivotal
 Group=pivotal
+SyslogIdentifier=celery-priority
 Environment=LOG_SUFFIX=celery_priority
 Environment=CELERYD_NODES="priority@%h"
 EnvironmentFile=/home/pivotal/.env

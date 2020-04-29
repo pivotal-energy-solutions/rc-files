@@ -3,14 +3,15 @@ Description=Node.js
 After=network.target
 
 [Service]
+User=pivotal
+Group=pivotal
+SyslogIdentifier=node
 Environment=NODE_ENV=production
 Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 ExecStart=/bin/sh -c '/usr/bin/node server.js'
 WorkingDirectory=/home/pivotal/axis/messaging/server
 Restart=on-failure
 KillSignal=SIGQUIT
-User=pivotal
-Group=pivotal
 StandardError=syslog
 NotifyAccess=all
 
