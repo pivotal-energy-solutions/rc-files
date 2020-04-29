@@ -7,11 +7,12 @@ Type=forking
 User=pivotal
 Group=pivotal
 Environment=LOG_SUFFIX=celery_worker
-Environment=CELERYD_NODES="worker-%n@%h"
+Environment=CELERYD_NODES="worker@%h"
 EnvironmentFile=/home/pivotal/.env
 WorkingDirectory=/home/pivotal
 ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
   -A celeryapp --concurrency=4 -Q celery,priority --time-limit=60 \
+  --logfile=/var/run/django/worker.log --hostname=worker@%h \
   --pidfile=/run/celery/worker.pid --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'

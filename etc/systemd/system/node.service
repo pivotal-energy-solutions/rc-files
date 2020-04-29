@@ -3,8 +3,6 @@ Description=Node.js
 After=network.target
 
 [Service]
-
-ExecStart=/bin/sh -c 'node server.js'
 Environment=NODE_ENV=production
 Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 ExecStart=/bin/sh -c '/usr/bin/node server.js'
@@ -14,7 +12,7 @@ KillSignal=SIGQUIT
 User=pivotal
 Group=pivotal
 StandardError=syslog
-NotifyAccess=all
+MoreNotifyAccess=all
 
 [Install]
 WantedBy=multi-user.target
