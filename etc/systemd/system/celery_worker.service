@@ -11,7 +11,7 @@ Environment=LOG_SUFFIX=celery_worker
 Environment=CELERYD_NODES="worker@HOSTNAME"
 EnvironmentFile=/home/pivotal/.env
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start worker \
   -A celeryapp --concurrency=4 -Q celery,priority --time-limit=60 \
   --logfile=/var/log/django/celery_worker.log \
   --pidfile=/run/celery/worker.pid --loglevel=INFO --events'

@@ -11,7 +11,7 @@ Environment=LOG_SUFFIX=celery_priority
 Environment=CELERYD_NODES="priority@HOSTNAME"
 EnvironmentFile=/home/pivotal/.env
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start priority \
   -A celeryapp --concurrency=4 -Q priority --time-limit=60 \
   --logfile=/var/log/django/celery_priority.log  \
   --pidfile=/run/celery/priority.pid --loglevel=INFO --events'
