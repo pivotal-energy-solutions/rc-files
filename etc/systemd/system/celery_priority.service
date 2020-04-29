@@ -1,0 +1,24 @@
+[Unit]
+Description=Celery Priority Worker
+After=network.target
+
+[Service]
+Type=forking
+User=pivotal
+Group=pivotal
+Environment=LOG_SUFFIX=celery_priority
+EnvironmentFile=/etc/sysconfig/axis
+EnvironmentFile=/etc/sysconfig/celery
+WorkingDirectory=/home/pivotal/axis
+ExecStart=/bin/sh -c '${CELERY_BIN} multi start priority \
+  -A ${CELERY_APP} --concurrency=4 -Q priority --time-limit=60 \
+  --pidfile=${CELERYD_PID_FILE} --logfile=${CELERYD_LOG_FILE} \
+  --loglevel=${CELERYD_LOG_LEVEL} ${CELERYD_OPTS}'
+ExecStop=/bin/sh -c '${CELERY_BIN} multi stopwait priority --pidfile=${CELERYD_PID_FILE}'
+ExecReload=/bin/sh -c '${CELERY_BIN} multi restart priority --pidfile=${CELERYD_PID_FILE}'
+PIDFile=/var/run/celery/priority.pid
+Restart=on-failure
+
+
+[Install]
+WantedBy=multi-user.target
