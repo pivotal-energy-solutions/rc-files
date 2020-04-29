@@ -15,7 +15,7 @@ ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
   --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'
-PIDFile=/var/run/celery/worker.pid
+PIDFile=/run/celery/worker.pid
 Restart=on-failure
 
 [Install]
