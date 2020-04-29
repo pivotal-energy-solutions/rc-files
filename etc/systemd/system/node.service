@@ -3,10 +3,12 @@ Description=Node.js
 After=network.target
 
 [Service]
-ExecStart=/bin/sh -c '${NODE_BIN} server.js'
-EnvironmentFile=/etc/sysconfig/axis
-EnvironmentFile=/etc/sysconfig/node
-WorkingDirectory=/home/pivotal/axis/axis/messaging/server
+
+ExecStart=/bin/sh -c 'node server.js'
+Environment=NODE_ENV=production
+Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+ExecStart=/bin/sh -c '/usr/bin/node server.js'
+WorkingDirectory=/home/pivotal/axis/messaging/server
 Restart=on-failure
 KillSignal=SIGQUIT
 User=pivotal
