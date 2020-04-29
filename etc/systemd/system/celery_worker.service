@@ -8,7 +8,7 @@ User=APP_USER
 Group=APP_GROUP
 SyslogIdentifier=celery-worker
 Environment=LOG_SUFFIX=celery_worker
-Environment=CELERYD_NODES="worker@%h"
+Environment=CELERYD_NODES="worker@HOSTNAME"
 EnvironmentFile=/home/pivotal/.env
 WorkingDirectory=/home/pivotal
 ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
