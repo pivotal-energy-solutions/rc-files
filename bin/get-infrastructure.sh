@@ -114,7 +114,6 @@ sudo pip3 install -qq --upgrade pip
 sudo pip3 install -qq --upgrade virtualenv
 sudo pip3 install -qq --upgrade poetry
 sudo pip3 install -qq --upgrade uwsgi
-sudo pip3 install -qq --upgrade dbus-python
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
