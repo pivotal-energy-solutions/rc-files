@@ -12,7 +12,7 @@ KillSignal=SIGQUIT
 User=pivotal
 Group=pivotal
 StandardError=syslog
-MoreNotifyAccess=all
+NotifyAccess=all
 
 [Install]
 WantedBy=multi-user.target
