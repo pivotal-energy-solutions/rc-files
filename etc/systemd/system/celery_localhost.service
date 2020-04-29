@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
-User=pivotal
-Group=pivotal
+User=APP_USER
+Group=APP_GROUP
 SyslogIdentifier=celery-localhost
 Environment=LOG_SUFFIX=celery_localhost
 Environment=CELERYD_NODES="localhost@%h"
@@ -13,7 +13,7 @@ EnvironmentFile=/home/pivotal/.env
 WorkingDirectory=/home/pivotal
 ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
   -A celeryapp --concurrency=4 -Q LOCALHOST --time-limit=60 \
-  --logfile=/var/log/django/celery_localhost.log --hostname=localhost@%n \
+  --logfile=/var/log/django/celery_localhost.log --hostname=localhost@HOSTNAME \
   --pidfile=/run/celery/localhost.pid --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'

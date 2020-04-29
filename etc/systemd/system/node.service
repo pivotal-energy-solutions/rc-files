@@ -3,8 +3,8 @@ Description=Node.js
 After=network.target
 
 [Service]
-User=pivotal
-Group=pivotal
+User=APP_USER
+Group=APP_GROUP
 SyslogIdentifier=node
 Environment=NODE_ENV=production
 Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
