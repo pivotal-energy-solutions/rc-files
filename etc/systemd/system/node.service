@@ -8,10 +8,9 @@ Group=pivotal
 SyslogIdentifier=node
 Environment=NODE_ENV=production
 Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
-ExecStart=/bin/sh -c '/usr/bin/node server.js'
 WorkingDirectory=/home/pivotal/axis/messaging/server
+ExecStart=/usr/bin/node server.js
 Restart=on-failure
-KillSignal=SIGQUIT
 StandardError=syslog
 NotifyAccess=all
 
