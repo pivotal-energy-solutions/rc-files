@@ -1,0 +1,20 @@
+[uwsgi]
+
+uid = 2500
+gid = 2500
+vassal_name = axis
+
+# Base stuff
+chdir = /home/pivotal/
+virtualenv = /home/pivotal/.venv
+module = wsgi
+vhost = true
+
+# process-related settings
+master = true
+processes = 1
+socket = /run/uwsgi/status.sock
+chmod-socket = 666
+
+enable-threads = true
+vacuum = true
