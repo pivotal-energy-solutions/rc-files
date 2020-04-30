@@ -18,3 +18,5 @@ chmod-socket = 666
 
 enable-threads = true
 vacuum = true
+
+py-autoreload = 3
