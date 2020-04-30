@@ -1,7 +1,7 @@
 [uwsgi]
 
-uid = 2500
-gid = 2500
+uid = APP_USER
+gid = APP_GROUP
 vassal_name = axis
 
 # Base stuff
