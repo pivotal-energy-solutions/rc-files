@@ -83,7 +83,7 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
     sudo yum -y groupinstall "Development Tools"
-    sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which
+    sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib zlib-devel libffi-devel wget git nmap-ncat which dbus-glib-devel
     # Build up Python $PYTHON_VERSION
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
