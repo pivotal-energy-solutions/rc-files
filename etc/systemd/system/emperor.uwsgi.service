@@ -10,6 +10,8 @@ KillSignal=SIGQUIT
 Type=notify
 StandardError=syslog
 NotifyAccess=all
+User=APP_USER
+Group=APP_GROUP
 
 [Install]
 WantedBy=multi-user.target

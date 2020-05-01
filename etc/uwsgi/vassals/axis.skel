@@ -5,8 +5,8 @@ gid = 2500
 vassal_name = axis
 
 # Base stuff
-chdir = /home/pivotal/
-virtualenv = /home/pivotal/.venv
+chdir = /home/APP_USER/
+virtualenv = /home/APP_USER/.venv
 module = wsgi
 vhost = true
 
