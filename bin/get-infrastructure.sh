@@ -109,7 +109,6 @@ if ! [ -x "$(command -v git)" ]; then
     echo "Git is not Installing"
     sudo yum install -y git
 fi
-echo "Git is installed."
 
 # Update pip and install pipenv and uwsgi
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
