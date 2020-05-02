@@ -103,18 +103,24 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
     sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
 fi
+echo "Python ${PYTHON_VERSION} is installed."
 
 if ! [ -x "$(command -v git)" ]; then
     echo "Git is not Installing"
     sudo yum install -y git
 fi
+echo "Git is installed."
+
+rehash
+
+echo "Rehash"
 
 # Update pip and install pipenv and uwsgi
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry || echo "Unable to upgrade poetry"
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python || echo "Unable to upgrade dbus-python"
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
