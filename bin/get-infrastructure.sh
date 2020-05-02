@@ -116,11 +116,11 @@ rehash
 echo "Rehash"
 
 # Update pip and install pipenv and uwsgi
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry || echo "Unable to upgrade poetry"
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
-sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python || echo "Unable to upgrade dbus-python"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry || echo "Unable to upgrade poetry"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python || echo "Unable to upgrade dbus-python"
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
