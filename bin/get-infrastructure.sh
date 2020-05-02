@@ -110,11 +110,11 @@ if ! [ -x "$(command -v git)" ]; then
 fi
 
 # Update pip and install pipenv and uwsgi
-sudo pip3 install -qq --upgrade pip
-sudo pip3 install -qq --upgrade virtualenv
-sudo pip3 install -qq --upgrade poetry
-sudo pip3 install -qq --upgrade uwsgi
-sudo pip3 install -qq --upgrade dbus-python
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi
+sudo /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
