@@ -93,7 +93,7 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     sudo make install
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
-    sudo rm /usr/src/Python-${PYTHON_VERSION}.tgz
+    sudo rm -f /usr/src/Python-${PYTHON_VERSION}.tgz
 
     # Build up Python PYTHON_BASE_VERSION Links so it's easy to find it
     sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
@@ -110,10 +110,6 @@ if ! [ -x "$(command -v git)" ]; then
     sudo yum install -y git
 fi
 echo "Git is installed."
-
-rehash
-
-echo "Rehash"
 
 # Update pip and install pipenv and uwsgi
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
