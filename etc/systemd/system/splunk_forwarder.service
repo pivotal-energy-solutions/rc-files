@@ -1,5 +1,5 @@
  [Unit]
- Description=Splunk Universal Forwarder 7.x
+ Description=Splunk Universal Forwarder
  Wants=network.target
 
  [Service]
