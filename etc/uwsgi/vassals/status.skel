@@ -6,9 +6,7 @@ vassal_name = status
 
 # Base stuff
 chdir = /usr/share/nginx/html
-virtualenv = /home/APP_USER/.venv
 module = wsgi
-vhost = true
 
 # process-related settings
 master = true
