@@ -94,15 +94,18 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
     sudo rm -f /usr/src/Python-${PYTHON_VERSION}.tgz
-
-    # Build up Python PYTHON_BASE_VERSION Links so it's easy to find it
-    sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
-    sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python3
-    sudo ln -s /usr/local/bin/pip${PYTHON_BASE_VERSION} /usr/bin/pip${PYTHON_BASE_VERSION}
-    sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
-    sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
-    sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
 fi
+
+# Build up Python PYTHON_BASE_VERSION Links so it's easy to find it
+if [ ! -L /usr/bin/python${PYTHON_BASE_VERSION} ]; then
+  sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
+  sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python3
+  sudo ln -s /usr/local/bin/pip${PYTHON_BASE_VERSION} /usr/bin/pip${PYTHON_BASE_VERSION}
+  sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
+  sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
+  sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
+fi
+
 echo "Python ${PYTHON_VERSION} is installed."
 
 if ! [ -x "$(command -v git)" ]; then
