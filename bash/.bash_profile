@@ -15,7 +15,7 @@
 [[ ${debug} ]] && echo "Setting up defaults"
 
 # General Specifics
-export EDITOR="vim"
+export EDITOR="vi"
 export CVSEDITOR=$EDITOR
 
 export LC_CTYPE='en_US.UTF-8'
@@ -117,6 +117,8 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+alias vim='vi'
 
 # Aliases
 alias env='env | egrep "^[A-Z0-9_]+=" | sort '

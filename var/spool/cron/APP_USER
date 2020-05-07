@@ -1,0 +1,6 @@
+# Crontab for the app user
+SHELL=/bin/sh
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+MAILTO=APP_USER
+
+* * * * * python3 .venv/lib/python3.7/site-packages/infrastructure/bin/rabbitmq_monitor.py -a axis -c APP_CLASS
