@@ -15,8 +15,8 @@ ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start priority \
   -A celeryapp --concurrency=4 -Q priority --time-limit=60 \
   --logfile=/var/log/django/celery_priority.log --pidfile=/run/celery/priority.pid \
   --no-color --loglevel=INFO --events'
-ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
-ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'
+ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait priority'
+ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart priority'
 PIDFile=/run/celery/priority.pid
 Restart=on-failure
 
