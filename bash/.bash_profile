@@ -122,6 +122,7 @@ alias vim='vi'
 
 # Aliases
 alias env='env | egrep "^[A-Z0-9_]+=" | sort '
+alias pvp='cd ~; source .venv/bin/activate'
 
 [ -d "$HOME/.local/bin" ] && export PATH=${PATH}:"$HOME/.local/bin"
 
