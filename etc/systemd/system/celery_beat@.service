@@ -10,7 +10,7 @@ SyslogIdentifier=celery-beat-%i
 Environment=LOG_SUFFIX=celery_beat_%i
 Environment=DJANGO_SETTINGS_MODULE="settings.%i"
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery beat -A celeryapp
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery beat -A celeryapp \
   --logfile=/var/log/django/celery_beat_%i.log --pidfile=/run/celery/celery_beat_%i.pid \
   --no-color --loglevel=INFO'
 PIDFile=/run/celery/celery_beat_%i.pid
