@@ -3,7 +3,6 @@ Description=Celery Beat %i
 After=network.target
 
 [Service]
-Type=forking
 User=APP_USER
 Group=APP_GROUP
 SyslogIdentifier=celery-beat-%i
