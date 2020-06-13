@@ -3,17 +3,18 @@ Description=Celery Beat %i
 After=network.target
 
 [Service]
-User=pivotal
-Group=pivotal
-EnvironmentFile=/etc/sysconfig/axis
-EnvironmentFile=/etc/sysconfig/celery
-Environment=DJANGO_SETTINGS_MODULE=settings.%i LOG_SUFFIX=celery_beat_%i
-WorkingDirectory=/home/pivotal/axis
-ExecStart=/bin/sh -c '${CELERY_BIN} beat -A ${CELERY_APP} --pidfile=/var/run/celery/celery_beat_%i.pid \
-  --logfile=/var/log/celery/celery_beat_%i.log --loglevel=${CELERYBEAT_LOG_LEVEL} ${CELERYBEAT_OPTS}'
- PIDFile=/var/run/celery/celery_beat_%i.pid
- Restart=on-failure
-
+Type=forking
+User=APP_USER
+Group=APP_GROUP
+SyslogIdentifier=celery-beat-%i
+Environment=LOG_SUFFIX=celery_beat_%i
+Environment=DJANGO_SETTINGS_MODULE="settings.%i"
+WorkingDirectory=/home/pivotal
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery beat -A celeryapp
+  --logfile=/var/log/django/celery_beat_%i.log --pidfile=/run/celery/celery_beat_%i.pid \
+  --no-color --loglevel=INFO'
+PIDFile=/run/celery/celery_beat_%i.pid
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
