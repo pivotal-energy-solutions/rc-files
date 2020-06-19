@@ -92,7 +92,7 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     cd /usr/src/Python-${PYTHON_VERSION}  || echo "Unable to cd to /usr/src/Python-${PYTHON_VERSION}"
     sudo ./configure --enable-optimizations
     sudo make < /dev/null
-    sudo make install </dev/null
+    sudo make install < /dev/null
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo rm -rf /usr/src/Python-${PYTHON_VERSION}
     sudo rm -f /usr/src/Python-${PYTHON_VERSION}.tgz
