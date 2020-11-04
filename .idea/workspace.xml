@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44130281-fec2-467b-b33d-de7b7318678b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/markdown-navigator-enh.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/markdown-navigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/nginx/default.d/basics.conf" beforeDir="false" afterPath="$PROJECT_DIR$/etc/nginx/default.d/basics.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/nginx/default.d/frontend.conf" beforeDir="false" afterPath="$PROJECT_DIR$/etc/nginx/default.d/frontend.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,17 +49,34 @@
       <updated>1582305909382</updated>
       <workItem from="1582305911607" duration="70000" />
       <workItem from="1582305988524" duration="36000" />
-      <workItem from="1592425214537" duration="41000" />
+      <workItem from="1592425214537" duration="219000" />
     </task>
+    <task id="LOCAL-00001" summary="update nginx config for frontend fonts support">
+      <created>1592425297695</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1592425297695</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="update nginx config for frontend fonts support" />
+    <option name="LAST_COMMIT_MESSAGE" value="update nginx config for frontend fonts support" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="639" y="422" key="cloudConfig.PluginsDialog" timestamp="1582305964202">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state x="1027" y="279" key="CommitChangelistDialog2" timestamp="1592425297565">
+      <screen x="0" y="23" width="2560" height="1347" />
     </state>
-    <state x="639" y="422" key="cloudConfig.PluginsDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1582305964202" />
+    <state x="1027" y="279" key="CommitChangelistDialog2/0.23.2560.1347@0.23.2560.1347" timestamp="1592425297565" />
+    <state x="1016" y="417" key="Vcs.Push.Dialog.v2" timestamp="1592425300281">
+      <screen x="0" y="23" width="2560" height="1347" />
+    </state>
+    <state x="1016" y="417" key="Vcs.Push.Dialog.v2/0.23.2560.1347@0.23.2560.1347" timestamp="1592425300281" />
   </component>
 </project>
