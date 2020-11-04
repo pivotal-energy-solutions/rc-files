@@ -10,4 +10,4 @@
   notifempty
   missingok
   su APP_USER APP_GROUP
-}ls
+}
