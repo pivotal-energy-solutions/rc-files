@@ -1,7 +1,7 @@
 /var/log/django/*.json {
   daily
   rotate 30
-  size 300M
+  size 500M
   create
   dateext
   dateyesterday
