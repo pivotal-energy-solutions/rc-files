@@ -1,4 +1,4 @@
-/var/log/django/*.json {
+/var/log/django/*.log {
   daily
   rotate 30
   size 500M
