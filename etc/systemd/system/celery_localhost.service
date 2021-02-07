@@ -11,10 +11,10 @@ Environment=LOG_SUFFIX=celery_localhost
 Environment=CELERYD_NODES="localhost@HOSTNAME"
 Environment=DJANGO_SETTINGS_MODULE="settings.HOST_CLASS"
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start localhost \
-  -A celeryapp --concurrency=4 -Q LOCALHOST --time-limit=60 \
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi worker -n localhost \
+  --concurrency=4 -Q LOCALHOST --time-limit=60 \
   --logfile=/var/log/django/celery_localhost.log --pidfile=/run/celery/localhost.pid \
-  --no-color --loglevel=INFO --events'
+  --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'
 PIDFile=/run/celery/localhost.pid

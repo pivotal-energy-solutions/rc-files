@@ -11,10 +11,10 @@ Environment=LOG_SUFFIX=celery_priority
 Environment=CELERYD_NODES="priority@HOSTNAME"
 Environment=DJANGO_SETTINGS_MODULE="settings.HOST_CLASS"
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start priority \
-  -A celeryapp --concurrency=4 -Q priority --time-limit=60 \
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi worker -n priority \
+  --concurrency=4 -Q priority --time-limit=60 \
   --logfile=/var/log/django/celery_priority.log --pidfile=/run/celery/priority.pid \
-  --no-color --loglevel=INFO --events'
+  --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait priority'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart priority'
 PIDFile=/run/celery/priority.pid

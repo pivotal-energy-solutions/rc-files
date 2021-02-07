@@ -11,10 +11,10 @@ Environment=LOG_SUFFIX=celery_worker
 Environment=CELERYD_NODES="worker@HOSTNAME"
 Environment=DJANGO_SETTINGS_MODULE="settings.HOST_CLASS"
 WorkingDirectory=/home/pivotal
-ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery multi start worker \
-  -A celeryapp --concurrency=4 -Q celery,priority --time-limit=60 \
+ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi worker -n worker \
+  --concurrency=4 -Q celery,priority --time-limit=60 \
   --logfile=/var/log/django/celery_worker.log --pidfile=/run/celery/worker.pid \
-  --no-color --loglevel=INFO --events'
+  --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait worker'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart worker'
 PIDFile=/run/celery/worker.pid
