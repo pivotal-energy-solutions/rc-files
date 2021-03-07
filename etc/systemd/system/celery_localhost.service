@@ -17,8 +17,7 @@ ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi start wo
   --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait localhost'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart localhost'
-PIDFile=/run/celery/localhost.pid
-Restart=on-failure
+Restart=always
 
 
 [Install]

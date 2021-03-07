@@ -17,8 +17,7 @@ ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi start wo
   --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait priority'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart priority'
-PIDFile=/run/celery/priority.pid
-Restart=on-failure
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
