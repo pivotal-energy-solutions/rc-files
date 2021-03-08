@@ -150,7 +150,7 @@
           {"name": "cpu_usage_nice", "unit": "Percent"},
           "cpu_usage_guest"
         ],
-        "totalcpu": false,
+        "totalcpu": true,
         "metrics_collection_interval": 60
       },
       "disk": {
