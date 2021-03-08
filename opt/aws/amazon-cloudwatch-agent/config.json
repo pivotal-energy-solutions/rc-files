@@ -134,7 +134,7 @@
       },
       "mem": {
         "measurement": [
-          {"name": "mem_used_percent", "rename": "% Memory Usage", "unit": "Percent"},
+          {"name": "mem_used_percent", "rename": "% Memory Usage", "unit": "Percent"}
         ],
         "metrics_collection_interval": 60
       },
