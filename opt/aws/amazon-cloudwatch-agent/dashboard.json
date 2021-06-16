@@ -1,0 +1,232 @@
+{
+    "widgets": [
+        {
+            "height": 6,
+            "width": 9,
+            "y": 0,
+            "x": 9,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "beta", "% Memory Usage", "AutoScalingGroupName", "beta" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-west-2",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 0,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "view": "bar",
+                "metrics": [
+                    [ "beta", "disk_used_percent", "AutoScalingGroupName", "beta" ]
+                ],
+                "region": "us-west-2",
+                "title": "% Disk Usage"
+            }
+        },
+        {
+            "height": 6,
+            "width": 24,
+            "y": 6,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/nginx/access' | fields @timestamp, status, host_class\n| filter host_class='beta'\n| stats  \n    sum( status < 299 ) as Status_2xx, \n    sum( status > 299 and status < 399 ) as Status_3xx, \n    sum( status > 399 and status < 499 ) as Status_4xx, \n    sum( status > 499 ) as Status_5xx by bin (30s)",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Overall NGINX Status",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 9,
+            "width": 9,
+            "y": 21,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/system/secure' | SOURCE '/app/system/messages' | SOURCE '/app/system/maillog' | SOURCE '/app/system/cron' | SOURCE '/app/rabbitmq' | SOURCE '/app/nginx/error' | SOURCE '/app/nginx/access' | SOURCE '/app/launch-host' | SOURCE '/app/django' | SOURCE '/app/celery/worker' | SOURCE '/app/celery/priority' | SOURCE '/app/celery/localhost' | fields message, msg, host_class\n| filter host_class='beta'\n| filter level_no>25\n| filter ispresent(msg)\n| stats count(*) as number by msg\n| sort number desc | limit 10\n",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Top warning / error message",
+                "view": "pie"
+            }
+        },
+        {
+            "height": 9,
+            "width": 6,
+            "y": 12,
+            "x": 9,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/nginx/access' | fields @message\n| filter host_class='beta'\n| filter ispresent(status)\n| stats count(*) as Quantity by status as Status",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Overall NGINX by Status",
+                "view": "pie"
+            }
+        },
+        {
+            "height": 9,
+            "width": 9,
+            "y": 12,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/nginx/access' | fields @timestamp, @message\n| filter host_class='beta'\n| parse request \"* * *\" as _meth, url, _http\n| filter url!='/services/websocket/socket.io.js'\n| filter url!='/services/websocket/?EIO=3&transport=websocket'\n| filter url!='/api/v2/messages/pull/'\n| stats count(*) as hits by url\n| order by hits desc\n| limit 20\n",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Top URLS",
+                "view": "pie"
+            }
+        },
+        {
+            "height": 9,
+            "width": 9,
+            "y": 12,
+            "x": 15,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/celery/worker' | SOURCE '/app/django' | fields @timestamp, @message\n| filter host_class='beta'\n| filter ispresent(user)\n| stats count(*) as hits by user\n| order by hits desc\n| limit 20\n",
+                "region": "us-west-2",
+                "stacked": false,
+                "view": "pie",
+                "title": "Top Users"
+            }
+        },
+        {
+            "height": 9,
+            "width": 24,
+            "y": 30,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/django' | SOURCE '/app/celery/worker' | fields @timestamp as DateTime, level_no, level_name as Level, message as Message, function_name as Function, host_class as Class\n| filter level_no > 25 | filter host_class='beta'\n| display DateTime, Class, Level, Message, Function\n| sort @timestamp desc\n| limit 100",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Most Recent Errors and Warnings",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 39,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "period": 60,
+                "metrics": [
+                    [ "AWS/Lambda", "Errors", "FunctionName", "slack_notification", { "id": "errors", "stat": "Sum", "color": "#d13212", "region": "us-west-2" } ],
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "slack_notification", { "id": "invocations", "stat": "Sum", "visible": false, "region": "us-west-2" } ],
+                    [ { "expression": "100 - 100 * errors / MAX([errors, invocations])", "label": "Success rate (%)", "id": "availability", "yAxis": "right", "region": "us-west-2" } ]
+                ],
+                "region": "us-west-2",
+                "title": "Slack Notification Overall Error count and success rate (%)",
+                "yAxis": {
+                    "right": {
+                        "max": 100
+                    }
+                },
+                "view": "timeSeries",
+                "stacked": false
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 0,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "beta", { "stat": "Average" } ]
+                ],
+                "legend": {
+                    "position": "bottom"
+                },
+                "period": 300,
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "beta - CPU Utilization",
+                "region": "us-west-2"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 39,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/rabbitmq' | fields @timestamp, @message\n| filter host_class='beta'\n| filter ispresent(messages)\n| sort @timestamp desc\n| stats sum(messages) by bin(60s)",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "RabbitMQ Message Counts",
+                "view": "bar"
+            }
+        },
+        {
+            "height": 9,
+            "width": 15,
+            "y": 21,
+            "x": 9,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/django' | fields @timestamp, @message\n| filter host_class='beta'\n| filter name='django.request'\n| stats count(args.0) by bin(30s)",
+                "region": "us-west-2",
+                "stacked": false,
+                "title": "Request Errors",
+                "view": "bar"
+            }
+        },
+        {
+            "height": 6,
+            "width": 12,
+            "y": 39,
+            "x": 12,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/nginx/access' | fields @timestamp, @message\n| filter host_class=\"beta\" \n| filter status > 199 \n| filter status < 300\n| filter common_url != \"*/messages/pull\"\n| filter common_url != \"*js\"\n| filter common_url != \"*html\"\n| stats avg(request_time) as avg_time by common_url,status\n| sort by avg_time desc\n| limit 30",
+                "region": "us-west-2",
+                "title": "Response Times",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 45,
+            "x": 18,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/app/system/maillog' | fields @timestamp, host_class\n| filter host_class=\"beta\"\n| filter syslog_tag~=\"postfix/smtp\"\n| filter message not like \"to=<pivotal@pivotalenergy.net>\"\n| filter message like \"to=\"\n| parse message \"*: to=<*>, relay=*, *\" as msg_id, to_address, relay, _extra\n| stats count(to_address) as number_messages by to_address\n| sort number_messages desc",
+                "region": "us-west-2",
+                "stacked": false,
+                "view": "table",
+                "title": "Mail Sent Counts"
+            }
+        },
+        {
+            "type": "log",
+            "x": 0,
+            "y": 45,
+            "width": 18,
+            "height": 6,
+            "properties": {
+                "query": "SOURCE '/app/system/maillog' | fields @timestamp, host_class\n| filter host_class=\"beta\"\n| filter syslog_tag~=\"postfix/smtp\"\n| filter message not like \"to=<pivotal@pivotalenergy.net>\"\n| filter message like \"to=\"\n| parse message \"*: to=<*>, relay=*, delay=*, delays=*, dsn=*, status=* (* * *)\" as msg_id, to_address, relay, delay, delays, dsn, status, code, response, record_id\n",
+                "region": "us-west-2",
+                "title": "Mail Log",
+                "view": "table"
+            }
+        }
+    ]
+}
