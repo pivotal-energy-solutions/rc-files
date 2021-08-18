@@ -2,5 +2,5 @@
 SHELL=/bin/sh
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 MAILTO=BACKEND_SUPPORT_EMAIL
-*/3 * * * * python3 /usr/local/lib/python3.8/site-packages/infrastructure/utils/monitors/system_stats.py -a APP_NAME -c HOST_CLASS -u APP_USER
-*/2 * * * * python3 /usr/local/lib/python3.8/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c HOST_CLASS
+*/3 * * * * python3 -W ignore /usr/local/lib/python3.8/site-packages/infrastructure/utils/monitors/system_stats.py -a APP_NAME -c HOST_CLASS -u APP_USER
+*/2 * * * * python3 -W ignore /usr/local/lib/python3.8/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c HOST_CLASS
