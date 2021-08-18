@@ -4,7 +4,7 @@
 
 SHELL=/bin/sh
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-MAILTO=APP_USER
+MAILTO=BACKEND_SUPPORT_EMAIL
 
 # the maximal random delay added to the base delay of the jobs
 # RANDOM_DELAY=45
