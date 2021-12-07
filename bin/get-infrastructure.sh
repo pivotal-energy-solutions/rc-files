@@ -78,7 +78,7 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-PYTHON_VERSION=3.8.9
+PYTHON_VERSION=3.10.0
 PYTHON_BASE_VERSION=`echo ${PYTHON_VERSION} | cut -d "." -f 1-2`
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
