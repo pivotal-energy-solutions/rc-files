@@ -78,7 +78,7 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-PYTHON_VERSION=3.10.0
+PYTHON_VERSION=3.10.1
 PYTHON_BASE_VERSION=`echo ${PYTHON_VERSION} | cut -d "." -f 1-2`
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
@@ -99,14 +99,11 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
 fi
 
 # Build up Python PYTHON_BASE_VERSION Links so it's easy to find it
-if [ ! -L /usr/bin/python${PYTHON_BASE_VERSION} ]; then
-  sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python${PYTHON_BASE_VERSION}
-  sudo ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/bin/python3
-  sudo ln -s /usr/local/bin/pip${PYTHON_BASE_VERSION} /usr/bin/pip${PYTHON_BASE_VERSION}
-  sudo ln -s /usr/local/bin/pip3 /usr/bin/pip3
-  sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-${PYTHON_BASE_VERSION}
-  sudo ln -s /usr/local/bin/easy_install-${PYTHON_BASE_VERSION} /usr/bin/easy_install-3
-fi
+sudo update-alternatives --install /usr/bin/python${PYTHON_BASE_VERSION} python${PYTHON_BASE_VERSION} /usr/local/bin/python${PYTHON_BASE_VERSION} 1
+sudo update-alternatives --install /usr/bin/pydoc${PYTHON_BASE_VERSION} pydoc${PYTHON_BASE_VERSION} /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_BASE_VERSION} 1
+sudo update-alternatives --install /usr/bin/pydoc3 pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1
 
 echo "Python ${PYTHON_VERSION} is installed."
 
