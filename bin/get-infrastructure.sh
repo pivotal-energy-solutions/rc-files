@@ -107,10 +107,10 @@ sudo update-alternatives --install /usr/bin/pip${PYTHON_BASE_VERSION} pip${PYTHO
 
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_BASE_VERSION} 1
 sudo update-alternatives --set python3 /usr/local/bin/python${PYTHON_BASE_VERSION}
-sudo update-alternatives --install /usr/bin/pydoc3 pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1
+sudo update-alternatives --install /usr/bin/pydoc3 pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
 sudo update-alternatives --set pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION}
 
-sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
+sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
 sudo update-alternatives --set pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION}
 
 sudo update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
