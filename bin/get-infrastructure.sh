@@ -113,7 +113,6 @@ sudo update-alternatives --install /usr/bin/python python /usr/local/bin/python$
 sudo update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
 
 sudo update-alternatives --set python /usr/bin/python3
-sudo update-alternatives --set pip /usr/bin/pip3
 
 echo "Python ${PYTHON_VERSION} is installed."
 
