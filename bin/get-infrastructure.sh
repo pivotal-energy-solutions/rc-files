@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This will pull the infrastructure module and install it
-# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -a axis -c production -vvv
+# curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -a axis -c gamma -vvv
 # curl -sSL --retry 5 https://github.com/pivotal-energy-solutions/rc-files/raw/master/bin/get-infrastructure.sh | sh -s -- -a axis --rabbitmq -vvv
 
 if ! [ -x "$(command -v sudo)" ]; then
