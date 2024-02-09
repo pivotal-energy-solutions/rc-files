@@ -86,7 +86,7 @@ if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     sudo yum -y groupinstall "Development Tools"
     sudo yum -y install openssl-libs openssl-devel bzip2-devel zlib \
       zlib-devel libffi-devel dbus-glib-devel readline-devel sqlite-devel \
-      tk-devel xz-devel expat-devel wget git nmap-ncat which wget
+      tk-devel xz-devel expat-devel libuuid-devel gdbm-libs  wget git nmap-ncat which wget
     # Build up Python $PYTHON_VERSION
     cd /usr/src || echo "Unable to cd to /usr/src"
     sudo wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
