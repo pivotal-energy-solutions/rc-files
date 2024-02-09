@@ -14,6 +14,7 @@ vhost = true
 master = true
 processes = 4
 socket = /run/uwsgi/uwsgi.sock
+socket-timeout = 90
 chmod-socket = 666
 
 # Websocket
@@ -23,4 +24,4 @@ http-to = /run/uwsgi/uwsgi.sock
 enable-threads = true
 vacuum = true
 
-buffer-size = 16384
+buffer-size = 32768
