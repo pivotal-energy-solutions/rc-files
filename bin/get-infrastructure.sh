@@ -78,7 +78,7 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-PYTHON_VERSION=3.10.1
+PYTHON_VERSION=3.12.2
 PYTHON_BASE_VERSION=`echo ${PYTHON_VERSION} | cut -d "." -f 1-2`
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
@@ -128,7 +128,6 @@ fi
 # Update pip and install pipenv and uwsgi
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade poetry || echo "Unable to upgrade poetry"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python==1.2.18 || echo "Unable to upgrade dbus-python"
 
@@ -151,8 +150,6 @@ else
       touch ~/.env
     fi
 fi
-
-sudo touch /usr/local/lib/python${PYTHON_BASE_VERSION}/site-packages/infrastructure/utils/logging_utils/.env
 
 echo "Starting Create or Update AMI"
 create_or_update_ami.py "$@"
