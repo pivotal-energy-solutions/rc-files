@@ -152,7 +152,7 @@ else
 fi
 
 echo "Starting Create or Update AMI"
-python${PYTHON_BASE_VERSION} create_or_update_ami.py "$@"
+create_or_update_ami.py "$@"
 
 if [ $? -eq 0 ] ; then
     echo ""
@@ -162,7 +162,7 @@ if [ $? -eq 0 ] ; then
     echo ""
     read -p "Shall we remove it [Yn]:" ans_yn
     case "$ans_yn" in
-        [Yy]) python${PYTHON_BASE_VERSION} create_or_update_ami.py -r --no-verify $@;;
+        [Yy]) create_or_update_ami.py -r --no-verify $@;;
 
          *) exit 3;;
     esac
