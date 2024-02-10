@@ -105,18 +105,18 @@ sudo update-alternatives --install /usr/bin/python${PYTHON_BASE_VERSION} python$
 sudo update-alternatives --install /usr/bin/pydoc${PYTHON_BASE_VERSION} pydoc${PYTHON_BASE_VERSION} /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1
 sudo update-alternatives --install /usr/bin/pip${PYTHON_BASE_VERSION} pip${PYTHON_BASE_VERSION} /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
 
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_BASE_VERSION} 1
-sudo update-alternatives --set python3 /usr/local/bin/python${PYTHON_BASE_VERSION}
-sudo update-alternatives --install /usr/bin/pydoc3 pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
-sudo update-alternatives --set pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION}
-
-sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
-sudo update-alternatives --set pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION}
-
-sudo update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
-sudo update-alternatives --set pip /usr/local/bin/pip${PYTHON_BASE_VERSION}
-
-sudo update-alternatives --set python /usr/bin/python3
+#sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_BASE_VERSION} 1
+#sudo update-alternatives --set python3 /usr/local/bin/python${PYTHON_BASE_VERSION}
+#sudo update-alternatives --install /usr/bin/pydoc3 pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
+#sudo update-alternatives --set pydoc3 /usr/local/bin/pydoc${PYTHON_BASE_VERSION}
+#
+#sudo update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION} 1 > /dev/null 2>&1
+#sudo update-alternatives --set pip3 /usr/local/bin/pip${PYTHON_BASE_VERSION}
+#
+#sudo update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip${PYTHON_BASE_VERSION} 1
+#sudo update-alternatives --set pip /usr/local/bin/pip${PYTHON_BASE_VERSION}
+#
+#sudo update-alternatives --set python /usr/bin/python3
 
 echo "Python ${PYTHON_VERSION} is installed."
 
@@ -130,7 +130,6 @@ fi
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade pip  || echo "Unable to upgrade pip"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade dbus-python==1.2.18 || echo "Unable to upgrade dbus-python"
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
