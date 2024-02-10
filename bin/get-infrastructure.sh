@@ -125,11 +125,12 @@ if ! [ -x "$(command -v git)" ]; then
     sudo yum install -y git
 fi
 
+
 # Update pip and install pipenv and uwsgi
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade pip  || echo "Unable to upgrade pip"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install -q --upgrade dbus-python==1.2.18 || echo "Unable to upgrade dbus-python"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade pip  || echo "Unable to upgrade pip"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade dbus-python==1.2.18 || echo "Unable to upgrade dbus-python"
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
@@ -137,8 +138,8 @@ if ! [ $(id -u) = 0 ]; then
       ssh-keyscan github.com 2> /dev/null | sudo tee -a /root/.ssh/known_hosts > /dev/null && \
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
-    sudo -HE pip3 uninstall -qq infrastructure -y
-    sudo -HE pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
+    sudo -HE pip3 uninstall --root-user-action=ignore -qq infrastructure -y
+    sudo -HE pip3 install --root-user-action=ignore -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
     if ! [ -f /root/.env ]; then
       sudo touch /root/.env
     fi
