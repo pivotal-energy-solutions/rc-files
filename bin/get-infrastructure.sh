@@ -130,7 +130,7 @@ fi
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade pip  || echo "Unable to upgrade pip"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade virtualenv || echo "Unable to upgrade virtualenv"
 sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade uwsgi || echo "Unable to upgrade uwsgi"
-sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade dbus-python || echo "Unable to upgrade dbus-python"
+sudo -HE /usr/bin/pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -q --upgrade dbus-python==1.2.18 || echo "Unable to upgrade dbus-python"
 
 # Ensure we are good with github
 if ! [ $(id -u) = 0 ]; then
