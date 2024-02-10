@@ -126,64 +126,6 @@
     }
   },
   "metrics": {
-    "namespace": "HOST_CLASS",
-    "aggregation_dimensions": [
-      [
-        "AutoScalingGroupName"
-      ],
-      [
-        "InstanceId",
-        "InstanceType"
-      ],
-      []
-    ],
-    "metrics_collected": {
-      "collectd": {},
-      "cpu": {
-        "resources": [
-          "*"
-        ],
-        "measurement": [
-          {"name": "cpu_usage_idle", "rename": "% Idle Time", "unit": "Percent"},
-          {"name": "cpu_usage_nice", "unit": "Percent"},
-          "cpu_usage_guest"
-        ],
-        "totalcpu": true,
-        "metrics_collection_interval": 60
-      },
-      "disk": {
-        "measurement": [
-          "used_percent"
-        ],
-        "metrics_collection_interval": 60,
-        "resources": [
-          "*"
-        ]
-      },
-      "mem": {
-        "measurement": [
-          {"name": "mem_used_percent", "rename": "% Memory Usage", "unit": "Percent"}
-        ],
-        "metrics_collection_interval": 60
-      },
-      "processes": {
-        "measurement": [
-          "running",
-          "sleeping",
-          "dead"
-        ]
-      },
-      "statsd": {
-        "metrics_aggregation_interval": 60,
-        "metrics_collection_interval": 10,
-        "service_address": ":8125"
-      }
-    },
-    "append_dimensions": {
-      "ImageId": "${aws:ImageId}",
-      "InstanceId": "${aws:InstanceId}",
-      "InstanceType": "${aws:InstanceType}",
-      "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
-    }
+    "namespace": "HOST_CLASS"
   }
 }
