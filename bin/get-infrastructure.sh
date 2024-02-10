@@ -137,22 +137,22 @@ if ! [ $(id -u) = 0 ]; then
       ssh-keyscan github.com 2> /dev/null | sudo tee -a /root/.ssh/known_hosts > /dev/null && \
       sudo chown root:root /root/.ssh/known_hosts && \
       sudo chmod 640 /root/.ssh/known_hosts
-    sudo -HE pip3 uninstall --root-user-action=ignore -qq infrastructure -y
-    sudo -HE pip3 install --root-user-action=ignore -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
+    sudo -HE pip${PYTHON_BASE_VERSION} uninstall --root-user-action=ignore -qq infrastructure -y
+    sudo -HE pip${PYTHON_BASE_VERSION} install --root-user-action=ignore -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
     if ! [ -f /root/.env ]; then
       sudo touch /root/.env
     fi
 else
     ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-    pip3 uninstall -qq infrastructure -y
-    pip3 install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
+    pip${PYTHON_BASE_VERSION} uninstall -qq infrastructure -y
+    pip${PYTHON_BASE_VERSION} install -qq --upgrade --no-cache-dir git+ssh://git@github.com/pivotal-energy-solutions/tensor-infrastructure.git || (c=$?; echo "Issue updating infrastructure"; (exit $c))
     if ! [ -f ~/.env ]; then
       touch ~/.env
     fi
 fi
 
 echo "Starting Create or Update AMI"
-create_or_update_ami.py "$@"
+python${PYTHON_BASE_VERSION} create_or_update_ami.py "$@"
 
 if [ $? -eq 0 ] ; then
     echo ""
@@ -162,7 +162,7 @@ if [ $? -eq 0 ] ; then
     echo ""
     read -p "Shall we remove it [Yn]:" ans_yn
     case "$ans_yn" in
-        [Yy]) create_or_update_ami.py -r --no-verify $@;;
+        [Yy]) python${PYTHON_BASE_VERSION} create_or_update_ami.py -r --no-verify $@;;
 
          *) exit 3;;
     esac
