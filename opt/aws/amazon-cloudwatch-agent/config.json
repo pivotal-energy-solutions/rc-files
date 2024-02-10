@@ -127,12 +127,6 @@
   },
   "metrics": {
     "namespace": "HOST_CLASS",
-    "append_dimensions": {
-      "ImageId": "${aws:ImageId}",
-      "InstanceId": "${aws:InstanceId}",
-      "InstanceType": "${aws:InstanceType}",
-      "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
-    },
     "aggregation_dimensions": [
       [
         "AutoScalingGroupName"
@@ -184,6 +178,12 @@
         "metrics_collection_interval": 10,
         "service_address": ":8125"
       }
+    },
+    "append_dimensions": {
+      "ImageId": "${aws:ImageId}",
+      "InstanceId": "${aws:InstanceId}",
+      "InstanceType": "${aws:InstanceType}",
+      "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
     }
   }
 }
