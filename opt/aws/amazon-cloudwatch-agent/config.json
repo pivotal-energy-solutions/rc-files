@@ -134,13 +134,17 @@
       "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
     },
     "aggregation_dimensions": [
-      ["InstanceId"], ["AutoScalingGroupName"],
-      ["InstanceId", "AutoScalingGroupName"]
+      [
+        "AutoScalingGroupName"
+      ],
+      [
+        "InstanceId",
+        "InstanceType"
+      ],
+      []
     ],
     "metrics_collected": {
-      "collectd": {
-        "metrics_aggregation_interval": 60
-      },
+      "collectd": {},
       "cpu": {
         "resources": [
           "*"
