@@ -127,18 +127,20 @@
   },
   "metrics": {
     "namespace": "HOST_CLASS",
+    "append_dimensions": {
+      "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+      "ImageId": "${aws:ImageId}",
+      "InstanceId": "${aws:InstanceId}",
+      "InstanceType": "${aws:InstanceType}"
+    },
     "aggregation_dimensions": [
-      [
-        "AutoScalingGroupName"
-      ],
-      [
-        "InstanceId",
-        "InstanceType"
-      ],
-      []
+      ["InstanceId"], ["AutoScalingGroupName"],
+      ["InstanceId", "AutoScalingGroupName"]
     ],
     "metrics_collected": {
-      "collectd": {},
+      "collectd": {
+        "metrics_aggregation_interval": 60
+      },
       "cpu": {
         "resources": [
           "*"
@@ -178,12 +180,6 @@
         "metrics_collection_interval": 10,
         "service_address": ":8125"
       }
-    },
-    "append_dimensions": {
-      "ImageId": "${aws:ImageId}",
-      "InstanceId": "${aws:InstanceId}",
-      "InstanceType": "${aws:InstanceType}",
-      "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
     }
   }
 }
