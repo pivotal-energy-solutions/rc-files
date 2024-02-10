@@ -128,10 +128,10 @@
   "metrics": {
     "namespace": "HOST_CLASS",
     "append_dimensions": {
-      "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
       "ImageId": "${aws:ImageId}",
       "InstanceId": "${aws:InstanceId}",
-      "InstanceType": "${aws:InstanceType}"
+      "InstanceType": "${aws:InstanceType}",
+      "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
     },
     "aggregation_dimensions": [
       ["InstanceId"], ["AutoScalingGroupName"],
