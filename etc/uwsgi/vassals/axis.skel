@@ -14,7 +14,7 @@ vhost = true
 master = true
 processes = 4
 socket = /run/uwsgi/uwsgi.sock
-socket-timeout = 90
+socket-timeout = 120
 chmod-socket = 666
 
 # Websocket
