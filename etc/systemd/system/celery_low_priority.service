@@ -12,7 +12,7 @@ Environment=CELERYD_NODES="low_priority@HOSTNAME"
 Environment=DJANGO_SETTINGS_MODULE="settings.HOST_CLASS"
 WorkingDirectory=/home/pivotal
 ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi start worker \
-  -n low-priority-HOSTNAME --concurrency=4 -Q priority --time-limit=60 \
+  -n low-priority-HOSTNAME --concurrency=4 -Q low_prioriry --time-limit=60 \
   --logfile=/var/log/django/celery_low_priority.log --pidfile=/run/celery/low_priority.pid \
   --loglevel=INFO --events'
 ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait low_priority'
