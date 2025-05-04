@@ -95,7 +95,7 @@
             "x": 15,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/celery/worker' | SOURCE '/app/django' | fields @timestamp, @message\n| filter host_class='beta'\n| filter ispresent(user)\n| stats count(*) as hits by user\n| order by hits desc\n| limit 20\n",
+                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/celery/low_priority'  | SOURCE '/app/celery/worker' | SOURCE '/app/django' | fields @timestamp, @message\n| filter host_class='beta'\n| filter ispresent(user)\n| stats count(*) as hits by user\n| order by hits desc\n| limit 20\n",
                 "region": "us-west-2",
                 "stacked": false,
                 "view": "pie",
@@ -109,7 +109,7 @@
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/django' | SOURCE '/app/celery/worker' | fields @timestamp as DateTime, level_no, level_name as Level, message as Message, function_name as Function, host_class as Class\n| filter level_no > 25 | filter host_class='beta'\n| display DateTime, Class, Level, Message, Function\n| sort @timestamp desc\n| limit 100",
+                "query": "SOURCE '/app/celery/localhost' | SOURCE '/app/celery/priority' | SOURCE '/app/celery/low_priority'  | SOURCE '/app/django' | SOURCE '/app/celery/worker' | fields @timestamp as DateTime, level_no, level_name as Level, message as Message, function_name as Function, host_class as Class\n| filter level_no > 25 | filter host_class='beta'\n| display DateTime, Class, Level, Message, Function\n| sort @timestamp desc\n| limit 100",
                 "region": "us-west-2",
                 "stacked": false,
                 "title": "Most Recent Errors and Warnings",
