@@ -2,6 +2,6 @@
 SHELL=/bin/sh
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 MAILTO=BACKEND_SUPPORT_EMAIL
-*/3 * * * * python3.13 -W ignore /usr/local/lib/python3.12/site-packages/infrastructure/utils/monitors/system_stats.py -a APP_NAME -c HOST_CLASS -u APP_USER
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.12/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c HOST_CLASS
-0 * * * * python3.13 -W ignore /usr/local/lib/python3.12/site-packages/infrastructure/bin/rabbitmq_queue_prune.py -a APP_NAME -c HOST_CLASS
+*/3 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/system_stats.py -a APP_NAME -c HOST_CLASS -u APP_USER
+*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c HOST_CLASS
+0 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/bin/rabbitmq_queue_prune.py -a APP_NAME -c HOST_CLASS
