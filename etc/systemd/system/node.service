@@ -11,7 +11,7 @@ Environment=PATH=/home/pivotal/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin
 WorkingDirectory=/home/pivotal/axis/messaging/server
 ExecStart=/usr/bin/node server.js
 Restart=on-failure
-StandardError=syslog
+StandardError=journal
 NotifyAccess=all
 
 [Install]
