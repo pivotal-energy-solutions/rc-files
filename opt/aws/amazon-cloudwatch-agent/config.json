@@ -44,8 +44,20 @@
             "timezone": "UTC"
           },
           {
+            "file_path": "/var/log/django/rabbitmq_stats_production.json",
+            "log_group_name": "/app/rabbitmq",
+            "log_stream_name": "production",
+            "timezone": "UTC"
+          },
+          {
             "file_path": "/var/log/django/django_celery_beat_beta.json",
             "log_group_name": "/app/celery/beat",
+            "log_stream_name": "beta",
+            "timezone": "UTC"
+          },
+          {
+            "file_path": "/var/log/django/rabbitmq_stats_beta.json",
+            "log_group_name": "/app/rabbitmq",
             "log_stream_name": "beta",
             "timezone": "UTC"
           },
@@ -56,8 +68,20 @@
             "timezone": "UTC"
           },
           {
+            "file_path": "/var/log/django/rabbitmq_stats_demo.json",
+            "log_group_name": "/app/rabbitmq",
+            "log_stream_name": "demo",
+            "timezone": "UTC"
+          },
+          {
             "file_path": "/var/log/django/django_celery_beat_staging.json",
             "log_group_name": "/app/celery/beat",
+            "log_stream_name": "staging",
+            "timezone": "UTC"
+          },
+          {
+            "file_path": "/var/log/django/rabbitmq_stats_staging.json",
+            "log_group_name": "/app/rabbitmq",
             "log_stream_name": "staging",
             "timezone": "UTC"
           },
@@ -68,9 +92,9 @@
             "timezone": "UTC"
           },
           {
-            "file_path": "/var/log/django/rabbitmq_stats.json",
+            "file_path": "/var/log/django/rabbitmq_stats_gamma.json",
             "log_group_name": "/app/rabbitmq",
-            "log_stream_name": "HOST_CLASS",
+            "log_stream_name": "gamma",
             "timezone": "UTC"
           },
           {
