@@ -20,4 +20,4 @@ ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart low_priority
 Restart=always
 
 [Install]
-WantedBy=multi-user.targetupdate
+WantedBy=multi-user.target
