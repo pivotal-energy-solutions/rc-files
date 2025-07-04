@@ -1,0 +1,65 @@
+# /etc/nginx/cors-allowed.map
+# Maps known frontend origins to CORS-allowed status
+        
+map $http_origin $cors_allowed {
+    default 0;
+
+    # PivotalEnergy - base frontends
+    "https://_HOST_CLASS_NON_PROD_pivotalenergy.com"             1;
+    "https://_HOST_CLASS_NON_PROD_pivotalenergy.net"             1;
+    "https://_HOST_CLASS_NON_PROD_pivotalenergysolutions.com"    1;
+    "https://_HOST_CLASS_NON_PROD_pivotalenergysolutions.net"    1;
+    "https://_HOST_CLASS_NON_PROD_pivotal.energy"                1;
+    "https://_HOST_CLASS_NON_PROD_pivotalenergy.us"              1;
+
+    # WWW variants
+    "https://www._HOST_CLASS_NON_PROD_pivotalenergy.com"         1;
+    "https://www._HOST_CLASS_NON_PROD_pivotalenergy.net"         1;
+    "https://www._HOST_CLASS_NON_PROD_pivotalenergysolutions.com" 1;
+    "https://www._HOST_CLASS_NON_PROD_pivotalenergysolutions.net" 1;
+    "https://www._HOST_CLASS_NON_PROD_pivotal.energy"            1;
+    "https://www._HOST_CLASS_NON_PROD_pivotalenergy.us"          1;
+
+    # Apex apps
+    "https://apex._HOST_CLASS_NON_PROD_pivotalenergy.com"        1;
+    "https://apex._HOST_CLASS_NON_PROD_pivotalenergy.net"        1;
+    "https://apex._HOST_CLASS_NON_PROD_pivotalenergysolutions.com" 1;
+    "https://apex._HOST_CLASS_NON_PROD_pivotalenergysolutions.net" 1;
+    "https://apex._HOST_CLASS_NON_PROD_pivotal.energy"           1;
+    "https://apex._HOST_CLASS_NON_PROD_pivotalenergy.us"         1;
+
+    # Axis apps
+    "https://axis._HOST_CLASS_NON_PROD_pivotalenergy.com"        1;
+    "https://axis._HOST_CLASS_NON_PROD_pivotalenergy.net"        1;
+    "https://axis._HOST_CLASS_NON_PROD_pivotalenergysolutions.com" 1;
+    "https://axis._HOST_CLASS_NON_PROD_pivotalenergysolutions.net" 1;
+    "https://axis._HOST_CLASS_NON_PROD_pivotal.energy"           1;
+    "https://axis._HOST_CLASS_NON_PROD_pivotalenergy.us"         1;
+
+    # NEEA apps
+    "https://neea._HOST_CLASS_NON_PROD_pivotalenergy.com"        1;
+    "https://neea._HOST_CLASS_NON_PROD_pivotalenergy.net"        1;
+    "https://neea._HOST_CLASS_NON_PROD_pivotalenergysolutions.com" 1;
+    "https://neea._HOST_CLASS_NON_PROD_pivotalenergysolutions.net" 1;
+    "https://neea._HOST_CLASS_NON_PROD_pivotal.energy"           1;
+    "https://neea._HOST_CLASS_NON_PROD_pivotalenergy.us"         1;
+
+    # HomeInnovation apps
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotalenergy.com" 1;
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotalenergy.net" 1;
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotalenergysolutions.com" 1;
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotalenergysolutions.net" 1;
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotal.energy"    1;
+    "https://homeinnovation._HOST_CLASS_NON_PROD_pivotalenergy.us"  1;
+
+    # GreenQuery
+    "https://_HOST_CLASS_NON_PROD_greenquery.com"               1;
+    "https://_HOST_CLASS_NON_PROD_greenquery.net"               1;
+    "https://_HOST_CLASS_NON_PROD_greenquery.org"               1;
+    "https://_HOST_CLASS_NON_PROD_greenquery.us"                1;
+
+    # HomeRecord
+    "https://_HOST_CLASS_NON_PROD_homerecord.com"               1;
+    "https://_HOST_CLASS_NON_PROD_homerecord.org"               1;
+    "https://_HOST_CLASS_NON_PROD_homerecord.us"                1;
+}
