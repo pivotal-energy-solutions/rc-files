@@ -15,7 +15,7 @@ KillSignal=SIGTERM
 EnvironmentFile=-/etc/sysconfig/docker_preloader
 
 # Main preload command
-ExecStart=/usr/bin/python3 /opt/docker_preloader/preload.py
+ExecStart=/usr/local/bin/python3 /opt/docker_preloader/preload.py
 
 # Clean stop without automatic pruning
 ExecStop=/usr/bin/echo "Docker image preloader stopped"
