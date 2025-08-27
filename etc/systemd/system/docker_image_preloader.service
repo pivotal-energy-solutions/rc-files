@@ -1,0 +1,29 @@
+[Unit]
+Description=Docker Image Preloader
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=600
+TimeoutStopSec=60
+KillMode=mixed
+KillSignal=SIGTERM
+
+# Environment
+EnvironmentFile=-/etc/sysconfig/docker_preloader
+
+# Main preload command
+ExecStart=/usr/bin/python3 /opt/docker_preloader/preload.py
+
+# Clean stop without automatic pruning
+ExecStop=/usr/bin/echo "Docker image preloader stopped"
+
+# Allow interruption
+SendSIGKILLTo=all
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
