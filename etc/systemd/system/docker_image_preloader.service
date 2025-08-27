@@ -4,8 +4,7 @@ After=docker.service network-online.target
 Wants=network-online.target
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+Type=simple
 TimeoutStartSec=600
 TimeoutStopSec=60
 KillMode=mixed
