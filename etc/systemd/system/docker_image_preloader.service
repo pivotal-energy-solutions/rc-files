@@ -19,8 +19,7 @@ ExecStart=/usr/local/bin/python3 /opt/docker_preloader/preload.py
 # Clean stop without automatic pruning
 ExecStop=/usr/bin/echo "Docker image preloader stopped"
 
-# Allow interruption
-SendSIGKILLTo=all
+# Logging
 StandardOutput=journal
 StandardError=journal
 
