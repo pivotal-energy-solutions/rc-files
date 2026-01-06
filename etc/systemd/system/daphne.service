@@ -1,6 +1,8 @@
 [Unit]
 Description=Daphne ASGI Server for Django Channels WebSocket
 After=network.target
+# Only start if Django Channels ASGI app is deployed
+ConditionPathExists=/home/APP_USER/asgi.py
 
 [Service]
 User=APP_USER
