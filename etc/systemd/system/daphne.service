@@ -1,0 +1,20 @@
+[Unit]
+Description=Daphne ASGI Server for Django Channels WebSocket
+After=network.target
+# Only start if Django Channels ASGI app is deployed
+ConditionPathExists=/home/APP_USER/asgi.py
+
+[Service]
+User=APP_USER
+Group=APP_GROUP
+SyslogIdentifier=daphne
+Environment=PATH=/home/APP_USER/.venv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+WorkingDirectory=/home/APP_USER
+ExecStart=/home/APP_USER/.venv/bin/daphne -b 127.0.0.1 -p 8001 --access-log - --proxy-headers asgi:application
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
