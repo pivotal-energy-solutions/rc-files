@@ -14,166 +14,264 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: #333;
-        }
-        .navbar {
-            background: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
-            border-bottom: 1px solid #080808;
-            padding: 0 20px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
-        }
-        .brand {
-            color: #999;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .brand:hover { color: #fff; }
-        .brand svg { width: 28px; height: 28px; }
-        .nav-links { display: flex; gap: 5px; }
-        .nav-links a {
-            color: #999;
-            text-decoration: none;
-            padding: 10px 15px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 14px;
-            border-radius: 4px;
-            transition: all 0.15s;
+            line-height: 1.42857143;
+            color: #333;
+            background-color: #fff;
+            padding-top: 50px;
         }
-        .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
-        .main {
-            flex: 1;
-            max-width: 1170px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .alert {
-            background: #fcf8e3;
-            border: 1px solid #faebcc;
-            border-radius: 4px;
-            padding: 20px;
+        a { color: #337ab7; text-decoration: none; }
+        a:hover { color: #23527c; text-decoration: underline; }
+
+        /* Bootstrap 3 navbar-inverse */
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            min-height: 50px;
             margin-bottom: 20px;
+            border: 1px solid transparent;
+            background-color: #222;
+            border-color: #080808;
+            z-index: 1030;
+        }
+        .navbar::before, .navbar::after { display: table; content: " "; }
+        .navbar::after { clear: both; }
+        .container {
+            max-width: 1170px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .navbar .container::before, .navbar .container::after { display: table; content: " "; }
+        .navbar .container::after { clear: both; }
+        .navbar-brand {
+            float: left;
+            padding: 8px 15px;
+            font-size: 18px;
+            line-height: 20px;
+            height: 50px;
+        }
+        .navbar-brand:hover { text-decoration: none; }
+        .navbar-brand svg {
+            height: 35px;
+            width: auto;
+        }
+        .navbar-nav {
+            float: right;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .navbar-nav > li {
+            float: left;
+        }
+        .navbar-nav > li > a {
+            display: block;
+            padding: 15px;
+            color: #9d9d9d;
+            line-height: 20px;
+        }
+        .navbar-nav > li > a:hover {
+            color: #fff;
+            background-color: transparent;
+        }
+
+        /* Content */
+        #content {
+            padding: 20px 0 40px;
+        }
+        .row { margin: 0 -15px; }
+        .row::before, .row::after { display: table; content: " "; }
+        .row::after { clear: both; }
+        .col-md-12 {
+            float: left;
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        /* Alert warning (Bootstrap 3) */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-warning {
+            color: #8a6d3b;
+            background-color: #fcf8e3;
+            border-color: #faebcc;
         }
         .alert h1 {
-            color: #8a6d3b;
+            margin-top: 0;
+            margin-bottom: 10px;
             font-size: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 500;
         }
-        .alert p {
-            color: #8a6d3b;
-            line-height: 1.6;
-        }
-        .content-box {
-            background: #fff;
+        .alert p { margin: 0; }
+
+        /* Panel (Bootstrap 3) */
+        .panel {
+            margin-bottom: 20px;
+            background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 30px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.05);
         }
-        .content-box h2 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+        .panel-heading {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            background-color: #f5f5f5;
         }
-        .content-box p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
+        .panel-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: inherit;
         }
-        .content-box a {
-            color: #337ab7;
-            text-decoration: none;
+        .panel-body {
+            padding: 15px;
         }
-        .content-box a:hover { text-decoration: underline; }
+        .panel-body p { margin-bottom: 10px; }
+        .panel-body p:last-child { margin-bottom: 0; }
+        .text-muted { color: #777; }
+
+        /* Button (Bootstrap 3) */
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            background: #337ab7;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
+            padding: 6px 12px;
+            margin-bottom: 0;
             font-size: 14px;
-            margin-top: 10px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
-        .btn:hover { background: #286090; text-decoration: none; }
-        .footer {
-            background: #f5f5f5;
-            border-top: 1px solid #e5e5e5;
-            padding: 20px;
+        .btn:hover { text-decoration: none; }
+        .btn-primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }
+
+        /* Footer */
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+        footer {
             text-align: right;
-        }
-        .footer p {
             color: #777;
             font-size: 12px;
-            max-width: 1170px;
-            margin: 0 auto;
         }
+
         @media (max-width: 768px) {
-            .navbar { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
-            .main { padding: 20px 15px; }
+            .navbar-brand { padding: 8px; }
+            .navbar-nav { display: none; }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+            }
+            a { color: #6db3f2; }
+            a:hover { color: #9dcbf7; }
+            .panel {
+                background-color: #2d2d2d;
+                border-color: #444;
+            }
+            .panel-heading {
+                background-color: #363636;
+                border-color: #444;
+            }
+            .panel-body { color: #ccc; }
+            .alert-warning {
+                background-color: #3d3520;
+                border-color: #5a4d2d;
+                color: #e8d5a5;
+            }
+            .btn-primary {
+                background-color: #2563eb;
+                border-color: #1d4ed8;
+            }
+            .btn-primary:hover {
+                background-color: #1d4ed8;
+                border-color: #1e40af;
+            }
+            hr { border-color: #444; }
+            footer { color: #888; }
+            .text-muted { color: #999; }
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" class="brand">
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" stroke="#666" stroke-width="3" fill="none"/>
-                <path d="M30 65V35h12l12 15-12 15H30z" fill="#999"/>
-                <path d="M58 65V35h12v30H58z" fill="#777"/>
-            </svg>
-            Pivotal Energy Solutions
-        </a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="https://support.pivotalenergysolutions.com">Support</a>
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 135">
+                    <g>
+                        <path d="M64.784,122.733 L103.816,49.434 L89.372,127.818 C89.371,127.818 77.663,126.831 64.784,122.733 z" fill="#BF0D25"/>
+                        <path d="M21.31,34.953 C21.31,34.953 51.376,0.06 127.359,6.916 C197.675,13.26 213.108,47.381 214.359,61.033 C218.753,108.977 111.618,94.927 111.618,94.927 C111.618,94.927 165.343,91.052 165.343,55.707 C165.343,25.497 141.914,13.699 104.594,13.699 C67.271,13.7 43.405,20.203 21.31,34.953 z" fill="#9d9d9d"/>
+                        <path d="M110.342,128.976 L112.056,106.343 C112.056,106.343 168.317,118.147 209.34,87.438 C209.34,87.438 178.394,128.925 110.342,128.976 z" fill="#BF0D25"/>
+                        <path d="M76.931,24.237 C76.931,24.237 5.509,32.204 5.509,70.811 C5.509,109.416 57.365,120.665 57.365,120.665 C57.365,120.665 25.634,105.588 31.342,66.949 C37.05,28.311 76.931,24.237 76.931,24.237 z" fill="#9d9d9d"/>
+                        <circle cx="103.815" cy="49.434" r="5.881" fill="#BF0D25"/>
+                    </g>
+                </svg>
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="https://support.pivotalenergysolutions.com">Support</a></li>
+            </ul>
         </div>
     </nav>
-    <main class="main">
-        <div class="alert">
-            <h1>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a6d3b" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                Page Not Found
-            </h1>
-            <p>The page you're looking for doesn't exist or may have been moved.</p>
+
+    <div class="container" id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <h1>Page Not Found</h1>
+                    <p>The page you're looking for doesn't exist or may have been moved.</p>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">What you can do</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Here are some helpful links to get you back on track:</p>
+                        <p>
+                            <a href="/" class="btn btn-primary">Go to Homepage</a>
+                        </p>
+                        <p style="margin-top: 15px;">
+                            If you believe this is an error, please
+                            <a href="https://support.pivotalenergysolutions.com">contact our support team</a>.
+                        </p>
+                        <p class="text-muted" style="margin-top: 15px; font-size: 12px;">
+                            Error Reference: 404 Not Found
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="content-box">
-            <h2>What you can do</h2>
-            <p>Here are some helpful links to get you back on track:</p>
-            <p>
-                <a href="/" class="btn">Go to Homepage</a>
-            </p>
-            <p style="margin-top: 20px;">
-                If you believe this is an error, please
-                <a href="https://support.pivotalenergysolutions.com">contact our support team</a>.
-            </p>
-            <p style="margin-top: 20px; color: #999; font-size: 13px;">
-                Error Reference: 404 Not Found
-            </p>
-        </div>
-    </main>
-    <footer class="footer">
-        <p>Copyright &copy; 2011-2026 Pivotal Energy Solutions. All Rights Reserved.</p>
-    </footer>
+        <hr>
+        <footer>
+            <p>Copyright &copy; 2011-2026 Pivotal Energy Solutions. All Rights Reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
