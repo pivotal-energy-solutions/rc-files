@@ -1,98 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>System Error Occurred</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Pivotal Energy Solution">
-        <meta name="author" content="Pivotal Energy Solutions">
-        <meta charset="UTF-8">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Pivotal Energy Solution">
-        <meta name="author" content="Pivotal Energy Solutions">
-        <meta charset="UTF-8">
-        <link rel="apple-touch-icon" sizes="180x180" href="//apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="//favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="//favicon-16x16.png">
-        <link rel="manifest" href="//site.webmanifest">
-        <link rel="mask-icon" href="//safari-pinned-tab.svg" color="#c9302c">
-        <meta name="msapplication-TileColor" content="#000000">
-        <meta name="theme-color" content="#ffffff">
-        <!-- Google Analytics -->
-        <script type="text/javascript">
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-26647319-1']);
-          _gaq.push(['_setDomainName', 'axis.pivotalenergy.net']);
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-        </script>
-    </head>
-
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand navbar-brand" href="/" id="brand">&nbsp;</a>
-                <div class="navbar-collapse collapse navbar-responsive-collapse nav-collapse-scrollable">
-                    <ul class="nav navbar-nav">
-                        <li class=" "><a href="/">Home</a></li>
-                        <li class=" dropdown">
-                            <a href="#" None class="dropdown-toggle" data-toggle="dropdown"> Axis <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class=""><a href="/company/public/" class="disabled"> Partner Companies</a></li>
-                            </ul>
-                        </li>
-                        <li class=" "><a href="/contact/" class="disabled"> Contact</a></li>
-                    </ul>
-                    <div class="pull-right"> </div>
-                </div>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Error - Pivotal Energy Solutions</title>
+    <meta name="description" content="Pivotal Energy Solutions">
+    <meta name="author" content="Pivotal Energy Solutions">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#222">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        .navbar {
+            background: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+            border-bottom: 1px solid #080808;
+            padding: 0 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+        }
+        .brand {
+            color: #999;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand:hover { color: #fff; }
+        .brand svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 5px; }
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .main {
+            flex: 1;
+            max-width: 1170px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .alert {
+            background: #f2dede;
+            border: 1px solid #ebccd1;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .alert h1 {
+            color: #a94442;
+            font-size: 24px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert p {
+            color: #a94442;
+            line-height: 1.6;
+        }
+        .alert a { color: #843534; }
+        .content-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 30px;
+        }
+        .content-box h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .content-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .content-box ul {
+            margin-left: 20px;
+            color: #666;
+        }
+        .content-box li { margin-bottom: 8px; }
+        .footer {
+            background: #f5f5f5;
+            border-top: 1px solid #e5e5e5;
+            padding: 20px;
+            text-align: right;
+        }
+        .footer p {
+            color: #777;
+            font-size: 12px;
+            max-width: 1170px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
+            .main { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#666" stroke-width="3" fill="none"/>
+                <path d="M30 65V35h12l12 15-12 15H30z" fill="#999"/>
+                <path d="M58 65V35h12v30H58z" fill="#777"/>
+            </svg>
+            Pivotal Energy Solutions
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="https://support.pivotalenergysolutions.com">Support</a>
         </div>
-        <div id="content" class="container">
-             <div id="message_area"></div>
-            <div class="row">
-                 <div class="col-md-9">
-                     <header>
-                         <div class="row row-header col-md-12">
-                             <p><span>System Interrupt Occurred</span></p>
-                         </div>
-                     </header>
-                     <div class="row col-md-12" style="min-height: 300px">
-                         <img class="img-rounded pull-right" width="400"
-                              src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/images/homes/winter/main_home.jpg">
-                         <div class="col-md-5 alert alert-danger">
-                             <h4>An error has occurred!</h4>
-			     <strong>We apologize for the interruption and have already been notified.</strong><br /><br />
-                             <p>We should have this resolved shortly.  If you would like to visit our support site click
-				<a href="http://support.pivotalenergysolutions.com" style="text-decoration: underline">here</a>.  <br /><br />
-				Thanks for your patience!</p><br>
-                         </div>
-                     </div>
-                </div>
-                 <div class="col-md-3" style="min-height: 300px">
-                     <div class="well" style="padding-top: 8px;min-height: 300px">
-                     </div>
-                 </div>
-             </div>
-             <hr/>
-             <footer>
-                 <div class="row">
-                     <div class="col-md-3"></div>
-                     <div class="col-md-9">
-                         <p class="text-muted text-right" style="font-size: x-small">
-                             Copyright © 2011-2025 Pivotal Energy Solutions. All Rights Reserved.
-                         </p>
-                     </div>
-                 </div>
-             </footer>
-            <script src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/js/vendor/bootstrap/3.3.2/bootstrap.min.js"></script>
+    </nav>
+    <main class="main">
+        <div class="alert">
+            <h1>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a94442" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                System Error Occurred
+            </h1>
+            <p><strong>We apologize for the interruption.</strong> Our team has been automatically notified and is working to resolve this issue.</p>
         </div>
-    </body>
+        <div class="content-box">
+            <h2>What you can do</h2>
+            <p>This error is usually temporary. Here are some things you can try:</p>
+            <ul>
+                <li>Wait a moment and <a href="javascript:location.reload()">refresh the page</a></li>
+                <li>Clear your browser cache and try again</li>
+                <li>If the problem persists, <a href="https://support.pivotalenergysolutions.com">contact our support team</a></li>
+            </ul>
+            <p style="margin-top: 20px; color: #999; font-size: 13px;">
+                Error Reference: 500 Internal Server Error
+            </p>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Copyright &copy; 2011-2026 Pivotal Energy Solutions. All Rights Reserved.</p>
+    </footer>
+</body>
 </html>

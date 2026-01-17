@@ -1,86 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Not Found</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pivotal Energy Solution">
-    <meta name="author" content="Pivotal Energy Solutions">
     <meta charset="UTF-8">
-    <link rel="apple-touch-icon" sizes="180x180" href="//apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="//favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="//favicon-16x16.png">
-    <link rel="manifest" href="//site.webmanifest">
-    <link rel="mask-icon" href="//safari-pinned-tab.svg" color="#c9302c">
-    <meta name="msapplication-TileColor" content="#000000">
-    <meta name="theme-color" content="#ffffff">
-
-    <link
-      href="https://s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/bootstrap/3.3.2/bootstrap.min.css?v=1"
-      rel="stylesheet" media="screen">
-    <link
-      href="https://s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/font-awesome/4.4.0/font-awesome.min.css?v=1"
-      rel="stylesheet" media="screen">
-    <link
-      href="https://s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/main.min.css?v=1"
-      rel="stylesheet"
-      media="screen">
-    <link
-      href="https://s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/bootstrap_datatables.min.css?v=1"
-      rel="stylesheet" media="screen">
-    <link
-      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/all.min.css"
-      type="text/css"
-      media="screen" rel="stylesheet"/>
-    <link
-      href="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/css/select2_modifications.min.css?v=1"
-      rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Pivotal Energy Solutions</title>
+    <meta name="description" content="Pivotal Energy Solutions">
+    <meta name="author" content="Pivotal Energy Solutions">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#222">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        .navbar {
+            background: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+            border-bottom: 1px solid #080808;
+            padding: 0 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+        }
+        .brand {
+            color: #999;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand:hover { color: #fff; }
+        .brand svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 5px; }
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .main {
+            flex: 1;
+            max-width: 1170px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .alert {
+            background: #fcf8e3;
+            border: 1px solid #faebcc;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .alert h1 {
+            color: #8a6d3b;
+            font-size: 24px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert p {
+            color: #8a6d3b;
+            line-height: 1.6;
+        }
+        .content-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 30px;
+        }
+        .content-box h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .content-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .content-box a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+        .content-box a:hover { text-decoration: underline; }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #337ab7;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #286090; text-decoration: none; }
+        .footer {
+            background: #f5f5f5;
+            border-top: 1px solid #e5e5e5;
+            padding: 20px;
+            text-align: right;
+        }
+        .footer p {
+            color: #777;
+            font-size: 12px;
+            max-width: 1170px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
+            .main { padding: 20px 15px; }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target=".navbar-responsive-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="brand navbar-brand" href="/" id="brand">&nbsp;</a>
-            <div class="navbar-collapse collapse navbar-responsive-collapse nav-collapse-scrollable">
-                <ul class="nav navbar-nav">
-                    <li class=" "><a href="/">Home</a></li>
-                </ul>
-                <div class="pull-right"></div>
-            </div>
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#666" stroke-width="3" fill="none"/>
+                <path d="M30 65V35h12l12 15-12 15H30z" fill="#999"/>
+                <path d="M58 65V35h12v30H58z" fill="#777"/>
+            </svg>
+            Pivotal Energy Solutions
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="https://support.pivotalenergysolutions.com">Support</a>
         </div>
-    </div>
-    <div id="content" class="container">
-        <article>
-            <br/>
-            <h2 class="text-danger text-center">
-                <i class="fa fa-thumbs-down"></i> Sorry, this page does not exist. <i
-              class="fa fa-frown-o"></i></h2>
-            <br/>
-            <br/>
-            <br/>
-            <p class="text-center">If you feel you received this in error please
-                <a href="https://support.pivotalenergysolutions.com">contact</a> your friendly support
-                representative for assistance.</p>
-
-        </article>
-        <hr/>
-        <footer>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-9">
-                    <p class="text-muted text-right" style="font-size: x-small">
-                        Copyright © 2011-2025 Pivotal Energy Solutions. All Rights Reserved.
-                    </p>
-                </div>
-            </div>
-        </footer>
-        <script
-          src="//s3.amazonaws.com/assets.pivotalenergy.net/static/production/js/vendor/bootstrap/3.3.2/bootstrap.min.js"></script>
-    </div>
+    </nav>
+    <main class="main">
+        <div class="alert">
+            <h1>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a6d3b" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                Page Not Found
+            </h1>
+            <p>The page you're looking for doesn't exist or may have been moved.</p>
+        </div>
+        <div class="content-box">
+            <h2>What you can do</h2>
+            <p>Here are some helpful links to get you back on track:</p>
+            <p>
+                <a href="/" class="btn">Go to Homepage</a>
+            </p>
+            <p style="margin-top: 20px;">
+                If you believe this is an error, please
+                <a href="https://support.pivotalenergysolutions.com">contact our support team</a>.
+            </p>
+            <p style="margin-top: 20px; color: #999; font-size: 13px;">
+                Error Reference: 404 Not Found
+            </p>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Copyright &copy; 2011-2026 Pivotal Energy Solutions. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>

@@ -1,29 +1,167 @@
 <!DOCTYPE html>
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#c9302c">
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="theme-color" content="#ffffff">
-
-<html>
+<html lang="en">
 <head>
-<title>Welcome to SITE_URL</title>
-<style>
-    body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITE_URL - Pivotal Energy Solutions</title>
+    <meta name="description" content="Pivotal Energy Solutions - Energy Efficiency Software">
+    <meta name="author" content="Pivotal Energy Solutions">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#222">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        .navbar {
+            background: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+            border-bottom: 1px solid #080808;
+            padding: 0 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+        }
+        .brand {
+            color: #999;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand:hover { color: #fff; }
+        .brand svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 5px; }
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .main {
+            flex: 1;
+            max-width: 1170px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .welcome-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            color: #5cb85c;
+        }
+        .welcome-box h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .welcome-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #5cb85c;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .footer {
+            background: #f5f5f5;
+            border-top: 1px solid #e5e5e5;
+            padding: 20px;
+            text-align: right;
+        }
+        .footer p {
+            color: #777;
+            font-size: 12px;
+            max-width: 1170px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
+            .welcome-box { padding: 30px 20px; margin: 0 15px; }
+            .welcome-box h1 { font-size: 22px; }
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to SITE_URL</h1>
-<p>If you see this page, the tensor web server is successfully installed and
-working. Further configuration is required.</p>
-
-<p><em>Thank you for using SITE_URL.</em></p>
+    <nav class="navbar">
+        <a href="/" class="brand">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#666" stroke-width="3" fill="none"/>
+                <path d="M30 65V35h12l12 15-12 15H30z" fill="#999"/>
+                <path d="M58 65V35h12v30H58z" fill="#777"/>
+            </svg>
+            Pivotal Energy Solutions
+        </a>
+        <div class="nav-links">
+            <a href="https://www.pivotalenergysolutions.com">About</a>
+            <a href="https://support.pivotalenergysolutions.com">Support</a>
+        </div>
+    </nav>
+    <main class="main">
+        <div class="welcome-box">
+            <svg class="welcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h1>Welcome to SITE_URL</h1>
+            <p>
+                The server is running and ready for deployment.
+                This instance is part of the Pivotal Energy Solutions infrastructure.
+            </p>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Server Online
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Copyright &copy; 2011-2026 Pivotal Energy Solutions. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>
