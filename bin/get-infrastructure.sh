@@ -78,8 +78,30 @@ if [ $_MISSING_KEYS = 1 ] || [ $_MISSING_AUTH_SOCK = 1 ]; then
   exit 255
 fi
 
-PYTHON_VERSION=3.13.3
+PYTHON_VERSION=3.14
 PYTHON_BASE_VERSION=`echo ${PYTHON_VERSION} | cut -d "." -f 1-2`
+OLD_PYTHON_VERSION=3.13
+
+# Uninstall old Python 3.13 if it exists
+if [ -x "$(command -v python${OLD_PYTHON_VERSION})" ]; then
+    echo "Removing old Python ${OLD_PYTHON_VERSION}..."
+    # Remove alternatives for old Python
+    sudo update-alternatives --remove python${OLD_PYTHON_VERSION} /usr/local/bin/python${OLD_PYTHON_VERSION} 2>/dev/null || true
+    sudo update-alternatives --remove pydoc${OLD_PYTHON_VERSION} /usr/local/bin/pydoc${OLD_PYTHON_VERSION} 2>/dev/null || true
+    sudo update-alternatives --remove pip${OLD_PYTHON_VERSION} /usr/local/bin/pip${OLD_PYTHON_VERSION} 2>/dev/null || true
+    # Remove old Python installation from /usr/local
+    sudo rm -f /usr/local/bin/python${OLD_PYTHON_VERSION}
+    sudo rm -f /usr/local/bin/python${OLD_PYTHON_VERSION}m
+    sudo rm -f /usr/local/bin/pydoc${OLD_PYTHON_VERSION}
+    sudo rm -f /usr/local/bin/pip${OLD_PYTHON_VERSION}
+    sudo rm -f /usr/local/bin/idle${OLD_PYTHON_VERSION}
+    sudo rm -f /usr/local/bin/2to3-${OLD_PYTHON_VERSION}
+    sudo rm -rf /usr/local/lib/python${OLD_PYTHON_VERSION}
+    sudo rm -rf /usr/local/include/python${OLD_PYTHON_VERSION}
+    sudo rm -rf /usr/local/include/python${OLD_PYTHON_VERSION}m
+    echo "Old Python ${OLD_PYTHON_VERSION} removed."
+fi
+
 if ! [ -x "$(command -v python${PYTHON_BASE_VERSION})" ]; then
     echo "Python ${PYTHON_VERSION} is not installed."
     sudo yum groups mark install "Development Tools"
