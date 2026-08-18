@@ -29,6 +29,16 @@ Restart=always
 # ASG terminated. A cgroup ceiling is the only thing that bounds a task already
 # in flight.
 #
+# Sized from measured per-child RSS, not the --max-memory-per-child design
+# target. On gamma under ordinary load a child on the default queue reached
+# 1782MB - three times the 600MB target - because that limit is only evaluated
+# BETWEEN tasks and does not bound a task in flight.
+#
+# concurrency 1 x ~1.8GB + ~400MB parent = ~2.2GB expected worst case.
+#
+# The previous 4G ceiling on celery_worker was below its real working set: gamma
+# recorded 19 OOM kills and 787 limit hits within ten minutes of coming up.
+#
 # Absolute, not a percentage. Concurrency is fixed in this unit, so the memory
 # this workload needs is fixed too - it does not scale with host RAM. A
 # percentage looked tidy and was wrong: at 10% the priority worker sat at 97% of
@@ -44,7 +54,7 @@ Restart=always
 # single child is killed. With continue, systemd leaves the unit running and
 # the celery parent respawns the child.
 MemoryAccounting=yes
-MemoryMax=1500M
+MemoryMax=3G
 OOMPolicy=continue
 
 

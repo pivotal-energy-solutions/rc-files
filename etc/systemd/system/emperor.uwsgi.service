@@ -22,7 +22,7 @@ Group=APP_GROUP
 # OOMPolicy=continue so the emperor survives a vassal worker being killed and
 # respawns it, rather than the whole unit going down.
 MemoryAccounting=yes
-MemoryMax=2500M
+MemoryMax=6G
 OOMPolicy=continue
 
 [Install]
