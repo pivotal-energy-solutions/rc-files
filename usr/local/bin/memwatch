@@ -1,20 +1,27 @@
 #!/bin/bash
-# memwatch - capture the stack of a process before it dies of its own memory use.
+# memwatch - name the task behind a memory blow-up.
 #
-# Identifying the cause of the 2026-08-17/18 outage required pasting a shell loop
-# onto a production host at 1am and waiting for it to catch the failure live. The
-# cgroup ceilings now kill a runaway before it takes the host, but a kill without
-# a stack trace tells you nothing about WHY. This runs continuously and dumps the
-# offender the moment it crosses the threshold - below the cgroup limit, so the
-# capture happens before the OOM kill.
+# Scope is deliberately narrow. CloudWatch already records % Memory Usage per
+# instance, and the cgroup ceilings already stop a runaway taking the host - and
+# the kernel logs the OOM kill with pid and RSS. What none of those provide is
+# WHICH TASK: every celery child is an identical `python3.14 -m celery worker`, so
+# the OOM message cannot tell the reconcile task from any other.
+#
+# That one missing piece - the Python stack - is the whole job here. Detection,
+# alerting and containment are handled elsewhere.
+#
+# Because containment is no longer this script's problem, it samples slowly. It
+# only has to catch the offender somewhere on its way to the cgroup ceiling, not
+# race a host into the ground.
 #
 # Output goes through logger to /var/log/messages -> CloudWatch /app/system/messages,
-# so the evidence leaves the box before the box is in trouble. A local file alone
-# dies with the instance.
+# so the evidence leaves the box even if the box does not survive.
 
 set -u
-THRESH_KB=${MEMWATCH_THRESHOLD_KB:-3000000}   # 3 GB; celery_worker cgroup caps at ~20% of RAM
-INTERVAL=${MEMWATCH_INTERVAL:-2}
+# 4 GB sits between the ~2.8 GB steady state of a healthy celery_worker cgroup and
+# its ~6.1 GB ceiling, so a dump lands on the way up without firing on normal load.
+THRESH_KB=${MEMWATCH_THRESHOLD_KB:-4000000}
+INTERVAL=${MEMWATCH_INTERVAL:-10}
 COOLDOWN=${MEMWATCH_COOLDOWN:-300}            # do not re-dump the same pid for 5 min
 PYSPY=/home/pivotal/.venv/bin/py-spy
 

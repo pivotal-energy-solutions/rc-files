@@ -8,10 +8,14 @@ ExecStart=/usr/local/bin/memwatch
 Restart=always
 RestartSec=10
 
-# Trip below the celery_worker cgroup ceiling (20% of RAM) so the stack is
-# captured before the OOM kill, not after.
-Environment=MEMWATCH_THRESHOLD_KB=3000000
-Environment=MEMWATCH_INTERVAL=2
+# Trips between the healthy steady state (~2.8 GB) and the celery_worker cgroup
+# ceiling (~6.1 GB), so the stack is captured on the way up rather than after the
+# OOM kill - the kill itself names only `python3.14`, which is every celery child.
+#
+# 10s rather than a tight loop: the cgroup handles containment, so this only has
+# to catch the offender somewhere in its climb, not outrun it.
+Environment=MEMWATCH_THRESHOLD_KB=4000000
+Environment=MEMWATCH_INTERVAL=10
 
 # This exists to diagnose memory exhaustion, so it must not contribute to it.
 MemoryAccounting=yes
