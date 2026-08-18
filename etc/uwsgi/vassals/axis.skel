@@ -42,4 +42,9 @@ harakiri-verbose = true
 # Recycle a worker whose RSS exceeds this AFTER its request completes. Unlike
 # harakiri this interrupts nothing - it bounds slow growth and any single
 # request that balloons, without a hard kill.
-reload-on-rss = 2048
+#
+# Must stay below emperor.uwsgi's MemoryMax divided by `processes`, or the
+# cgroup kills a worker mid-request before this ever gets to recycle it
+# gracefully. 4 processes x 1024MB = 4GB against a 6G ceiling. Measured
+# workers sit at ~376MB, so this is ~2.7x normal.
+reload-on-rss = 1024
