@@ -20,12 +20,6 @@
             "timezone": "UTC"
           },
           {
-            "file_path": "/var/log/django/django_celery_localhost.json",
-            "log_group_name": "/app/celery/localhost",
-            "log_stream_name": "HOST_CLASS",
-            "timezone": "UTC"
-          },
-          {
             "file_path": "/var/log/django/django_celery_priority.json",
             "log_group_name": "/app/celery/priority",
             "log_stream_name": "HOST_CLASS",
