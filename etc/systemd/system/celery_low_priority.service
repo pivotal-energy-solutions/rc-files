@@ -20,5 +20,29 @@ ExecStop=/bin/sh -c '/home/pivotal/.venv/bin/celery multi stopwait low_priority'
 ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart low_priority'
 Restart=always
 
+# --- memory ceiling -------------------------------------------------------
+# concurrency 1, ~1.0 GB at the 600 MB/child design target.
+#
+# --max-memory-per-child is only evaluated BETWEEN tasks, so a single task that
+# never returns is never checked. On 2026-08-18 one child reached 6.6 GB - 11x
+# the 600 MB target - and exhausted the host, which the ALB then failed and the
+# ASG terminated. A cgroup ceiling is the only thing that bounds a task already
+# in flight.
+#
+# Percentage rather than an absolute so this scales across instance sizes
+# without per-host-class tuning.
+#
+# No MemoryHigh: it throttles under reclaim rather than killing, which
+# reproduces the exact stall this exists to prevent. A clean kill is better
+# than a slow strangle.
+#
+# OOMPolicy=continue: the default (stop) would take the whole unit down when a
+# single child is killed. With continue, systemd leaves the unit running and
+# the celery parent respawns the child.
+MemoryAccounting=yes
+MemoryMax=8%
+OOMPolicy=continue
+
+
 [Install]
 WantedBy=multi-user.target

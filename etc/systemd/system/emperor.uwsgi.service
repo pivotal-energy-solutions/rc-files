@@ -13,6 +13,18 @@ NotifyAccess=all
 User=APP_USER
 Group=APP_GROUP
 
+# --- memory ceiling -------------------------------------------------------
+# processes = 4 at roughly 430 MB steady, so ~1.7 GB in normal operation.
+# reload-on-rss in the vassal recycles a bloated worker gracefully after its
+# request; this is the hard backstop for a single request that balloons faster
+# than that check can fire.
+#
+# OOMPolicy=continue so the emperor survives a vassal worker being killed and
+# respawns it, rather than the whole unit going down.
+MemoryAccounting=yes
+MemoryMax=15%
+OOMPolicy=continue
+
 [Install]
 WantedBy=multi-user.target
 Alias=uwsgi.service
