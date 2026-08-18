@@ -1,0 +1,23 @@
+[Unit]
+Description=Capture stack traces of processes crossing a memory threshold
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/memwatch
+Restart=always
+RestartSec=10
+
+# Trip below the celery_worker cgroup ceiling (20% of RAM) so the stack is
+# captured before the OOM kill, not after.
+Environment=MEMWATCH_THRESHOLD_KB=3000000
+Environment=MEMWATCH_INTERVAL=2
+
+# This exists to diagnose memory exhaustion, so it must not contribute to it.
+MemoryAccounting=yes
+MemoryMax=64M
+OOMPolicy=continue
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

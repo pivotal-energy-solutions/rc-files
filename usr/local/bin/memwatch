@@ -1,0 +1,53 @@
+#!/bin/bash
+# memwatch - capture the stack of a process before it dies of its own memory use.
+#
+# Identifying the cause of the 2026-08-17/18 outage required pasting a shell loop
+# onto a production host at 1am and waiting for it to catch the failure live. The
+# cgroup ceilings now kill a runaway before it takes the host, but a kill without
+# a stack trace tells you nothing about WHY. This runs continuously and dumps the
+# offender the moment it crosses the threshold - below the cgroup limit, so the
+# capture happens before the OOM kill.
+#
+# Output goes through logger to /var/log/messages -> CloudWatch /app/system/messages,
+# so the evidence leaves the box before the box is in trouble. A local file alone
+# dies with the instance.
+
+set -u
+THRESH_KB=${MEMWATCH_THRESHOLD_KB:-3000000}   # 3 GB; celery_worker cgroup caps at ~20% of RAM
+INTERVAL=${MEMWATCH_INTERVAL:-2}
+COOLDOWN=${MEMWATCH_COOLDOWN:-300}            # do not re-dump the same pid for 5 min
+PYSPY=/home/pivotal/.venv/bin/py-spy
+
+declare -A last_dump
+
+log() { logger -t memwatch -- "$*"; }
+
+log "started threshold=$((THRESH_KB/1024))MB interval=${INTERVAL}s"
+
+while :; do
+    while read -r pid rss comm; do
+        [ "${rss:-0}" -gt "$THRESH_KB" ] 2>/dev/null || continue
+
+        now=$(date +%s)
+        prev=${last_dump[$pid]:-0}
+        [ $((now - prev)) -lt "$COOLDOWN" ] && continue
+        last_dump[$pid]=$now
+
+        log "TRIPPED pid=$pid rss=$((rss/1024))MB comm=$comm"
+        ps -o args= -p "$pid" 2>/dev/null | cut -c1-300 | while read -r l; do log "  cmd: $l"; done
+
+        if [ -x "$PYSPY" ]; then
+            # --nonblocking: do not pause the target. A stop-the-world dump on a
+            # host already under memory pressure is its own hazard.
+            timeout 30 "$PYSPY" dump --pid "$pid" --nonblocking 2>&1 \
+                | head -60 | while read -r l; do log "  $l"; done
+        else
+            log "  py-spy not present at $PYSPY - stack unavailable"
+        fi
+
+        free -m 2>/dev/null | awk '/^Mem:/{print "mem total="$2" used="$3" avail="$7}' \
+            | while read -r l; do log "  $l"; done
+    done < <(ps -eo pid=,rss=,comm= --sort=-rss 2>/dev/null | head -20)
+
+    sleep "$INTERVAL"
+done
