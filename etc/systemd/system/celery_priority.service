@@ -21,7 +21,7 @@ ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart priority'
 Restart=always
 
 # --- memory ceiling -------------------------------------------------------
-# concurrency 2, ~1.6 GB at the 600 MB/child design target.
+# concurrency 2: 2x600MB + 400MB parent = ~1.6GB.
 #
 # --max-memory-per-child is only evaluated BETWEEN tasks, so a single task that
 # never returns is never checked. On 2026-08-18 one child reached 6.6 GB - 11x
@@ -29,8 +29,12 @@ Restart=always
 # ASG terminated. A cgroup ceiling is the only thing that bounds a task already
 # in flight.
 #
-# Percentage rather than an absolute so this scales across instance sizes
-# without per-host-class tuning.
+# Absolute, not a percentage. Concurrency is fixed in this unit, so the memory
+# this workload needs is fixed too - it does not scale with host RAM. A
+# percentage looked tidy and was wrong: at 10% the priority worker sat at 97% of
+# its own ceiling while idle on an 8GB host, and the rabbitmq host (t3.large) and
+# masterimage (m5.large) are both 8GB. They would have OOM-killed celery under
+# any real load.
 #
 # No MemoryHigh: it throttles under reclaim rather than killing, which
 # reproduces the exact stall this exists to prevent. A clean kill is better
@@ -40,7 +44,7 @@ Restart=always
 # single child is killed. With continue, systemd leaves the unit running and
 # the celery parent respawns the child.
 MemoryAccounting=yes
-MemoryMax=10%
+MemoryMax=2G
 OOMPolicy=continue
 
 
