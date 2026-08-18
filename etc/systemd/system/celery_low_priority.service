@@ -12,7 +12,7 @@ Environment=CELERYD_NODES="low_priority@HOSTNAME"
 Environment=DJANGO_SETTINGS_MODULE="settings.HOST_CLASS"
 WorkingDirectory=/home/pivotal
 ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp multi start worker \
-  -n low-priority-HOSTNAME --concurrency=1 -Q low-priority --prefetch-multiplier=1 \
+  -n low-priority-HOSTNAME --concurrency=3 -Q low-priority --prefetch-multiplier=1 \
   --max-tasks-per-child=20 --max-memory-per-child=600000 --time-limit=14400 --soft-time-limit=12600 \
   --logfile=/var/log/django/celery_low_priority.log --pidfile=/run/celery/low_priority.pid \
   --loglevel=INFO --events'
@@ -21,7 +21,7 @@ ExecReload=/bin/sh -c '/home/pivotal/.venv/bin/celery multi restart low_priority
 Restart=always
 
 # --- memory ceiling -------------------------------------------------------
-# concurrency 1: 600MB + 400MB parent = ~1.0GB.
+# concurrency 3: 3x600MB + 400MB parent = ~2.2GB at the design target.
 #
 # --max-memory-per-child is only evaluated BETWEEN tasks, so a single task that
 # never returns is never checked. On 2026-08-18 one child reached 6.6 GB - 11x
@@ -34,7 +34,16 @@ Restart=always
 # 1782MB - three times the 600MB target - because that limit is only evaluated
 # BETWEEN tasks and does not bound a task in flight.
 #
-# concurrency 1 x ~1.8GB + ~400MB parent = ~2.2GB expected worst case.
+# concurrency 3 x ~1.8GB + ~400MB parent = ~5.8GB expected worst case.
+#
+# Raised from 1 ahead of the axis change that moves all 59 scheduled tasks off
+# the default queue onto this one. Those tasks currently land on `celery`
+# because CELERY_BEAT_SCHEDULE declares its queue at the top level of each
+# entry, where django-celery-beat never reads it. At concurrency 1 they would
+# serialise: 8 fire together at 07:05 and 10 pollers run every 5 minutes.
+#
+# Safe to ship before that change - nothing routes here yet, so this is spare
+# capacity until axis catches up.
 #
 # The previous 4G ceiling on celery_worker was below its real working set: gamma
 # recorded 19 OOM kills and 787 limit hits within ten minutes of coming up.
@@ -54,7 +63,7 @@ Restart=always
 # single child is killed. With continue, systemd leaves the unit running and
 # the celery parent respawns the child.
 MemoryAccounting=yes
-MemoryMax=3G
+MemoryMax=6G
 OOMPolicy=continue
 
 
