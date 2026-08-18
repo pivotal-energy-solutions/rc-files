@@ -1,0 +1,162 @@
+name: Publish rc-files to S3
+
+# Instances read their boot configuration from S3 rather than from GitHub's raw
+# CDN. On 2026-08-17 raw.githubusercontent.com returned HTTP 429 persistently
+# and instances could not launch at all - independent of any deploy. Publishing
+# here can be broken for hours with no effect on instance launches, because S3
+# keeps serving the last published version.
+#
+# See pivotal-energy-solutions/tensor-infrastructure#72
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+# Required for OIDC federation to AWS. No long-lived keys.
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  # Serialise publishes so two runs cannot interleave writes to the pointer.
+  group: publish-rc-files
+  cancel-in-progress: false
+
+env:
+  BUCKET: deployment.metadata
+  PREFIX: rc-files
+  # Old versions exist only for rollback. An instance reads its version once at
+  # boot and never again, so nothing needs a version older than the time it
+  # takes a fleet to cycle. Keeping ten bounds growth while leaving headroom.
+  KEEP_VERSIONS: 10
+
+jobs:
+  publish:
+    name: Publish to S3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-west-2' }}
+
+      - name: Compute version
+        id: version
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # Lexicographically sortable, so listing the prefix sorts
+          # chronologically without needing object metadata.
+          VERSION="$(date -u +%Y%m%dT%H%M%SZ)-${SHA:0:7}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Publishing ${VERSION}"
+
+      - name: Upload versioned snapshot
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          DEST="s3://${BUCKET}/${PREFIX}/${VERSION}"
+
+          # The version prefix is immutable and written in full BEFORE the
+          # pointer moves, so an instance booting mid-publish can never read a
+          # mix of old and new files.
+          aws s3 sync . "${DEST}/" \
+            --exclude "*" \
+            --include "bash/*" \
+            --include "bin/*" \
+            --include "etc/*" \
+            --include "opt/*" \
+            --include "usr/*" \
+            --include "var/*" \
+            --only-show-errors
+
+          echo "Uploaded to ${DEST}/"
+
+      - name: Verify snapshot before moving the pointer
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          PREFIX_PATH="${PREFIX}/${VERSION}"
+
+          # A canary file every instance needs. If this is missing the upload
+          # was partial and must not become current.
+          CANARY="etc/nginx/default.d/basics.conf"
+          if ! aws s3api head-object --bucket "${BUCKET}" --key "${PREFIX_PATH}/${CANARY}" >/dev/null 2>&1; then
+            echo "::error::${CANARY} missing from ${PREFIX_PATH} - refusing to publish"
+            exit 1
+          fi
+
+          COUNT="$(aws s3api list-objects-v2 --bucket "${BUCKET}" --prefix "${PREFIX_PATH}/" \
+                    --query 'length(Contents)' --output text)"
+          if [ "${COUNT}" = "None" ] || [ "${COUNT}" -lt 1 ]; then
+            echo "::error::no objects uploaded under ${PREFIX_PATH}"
+            exit 1
+          fi
+          echo "Verified ${COUNT} objects under ${PREFIX_PATH}"
+
+      - name: Move the current pointer
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          # Last write wins and this is the last step - instances only ever see
+          # a fully uploaded, verified version.
+          printf '%s' "${VERSION}" | aws s3 cp - "s3://${BUCKET}/${PREFIX}/current" \
+            --content-type text/plain --only-show-errors
+
+          PUBLISHED="$(aws s3 cp "s3://${BUCKET}/${PREFIX}/current" - 2>/dev/null)"
+          if [ "${PUBLISHED}" != "${VERSION}" ]; then
+            echo "::error::pointer reads '${PUBLISHED}', expected '${VERSION}'"
+            exit 1
+          fi
+          echo "Pointer now at ${VERSION}"
+
+      - name: Prune old versions
+        run: |
+          set -euo pipefail
+          CURRENT="$(aws s3 cp "s3://${BUCKET}/${PREFIX}/current" - 2>/dev/null)"
+
+          # Version names sort chronologically, so plain sort is enough.
+          VERSIONS="$(aws s3api list-objects-v2 --bucket "${BUCKET}" \
+                        --prefix "${PREFIX}/" --delimiter "/" \
+                        --query 'CommonPrefixes[].Prefix' --output text \
+                      | tr '\t' '\n' | sed "s|^${PREFIX}/||; s|/$||" | grep -v '^$' | sort)"
+
+          TOTAL="$(printf '%s\n' "${VERSIONS}" | grep -c . || true)"
+          echo "Found ${TOTAL} versions, keeping ${KEEP_VERSIONS}"
+
+          if [ "${TOTAL}" -le "${KEEP_VERSIONS}" ]; then
+            echo "Nothing to prune"
+            exit 0
+          fi
+
+          DOOMED="$(printf '%s\n' "${VERSIONS}" | head -n "-${KEEP_VERSIONS}")"
+          for v in ${DOOMED}; do
+            if [ "${v}" = "${CURRENT}" ]; then
+              # Belt and braces: current is newest so this should be impossible.
+              echo "::warning::refusing to prune the current version ${v}"
+              continue
+            fi
+            echo "Pruning ${v}"
+            aws s3 rm "s3://${BUCKET}/${PREFIX}/${v}/" --recursive --only-show-errors
+          done
+
+      - name: Summary
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          {
+            echo "### rc-files published"
+            echo ""
+            echo "- **Version:** \`${VERSION}\`"
+            echo "- **Location:** \`s3://${BUCKET}/${PREFIX}/\`"
+            echo "- **Retention:** ${KEEP_VERSIONS} versions"
+          } >> "$GITHUB_STEP_SUMMARY"
