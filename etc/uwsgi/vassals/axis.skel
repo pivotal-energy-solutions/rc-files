@@ -25,3 +25,21 @@ enable-threads = true
 vacuum = true
 
 buffer-size = 32768
+
+# --- worker protection ----------------------------------------------------
+# harakiri matches nginx's uwsgi_read_timeout (conf.d/default.conf:41). nginx
+# has already discarded the response by then, so this only kills work nobody is
+# waiting for - but it is the ONLY thing that returns the worker to the pool.
+# An nginx timeout does not free a uwsgi worker; uwsgi runs the request to
+# completion regardless.
+#
+# With processes = 4, a handful of slow requests exhausts the pool and there is
+# nothing left to answer /elb-health, which is how a slow database query became
+# a terminated instance on 2026-08-18 (10:32 and 14:36).
+harakiri = 120
+harakiri-verbose = true
+
+# Recycle a worker whose RSS exceeds this AFTER its request completes. Unlike
+# harakiri this interrupts nothing - it bounds slow growth and any single
+# request that balloons, without a hard kill.
+reload-on-rss = 2048
