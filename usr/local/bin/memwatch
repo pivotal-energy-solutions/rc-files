@@ -1,0 +1,60 @@
+#!/bin/bash
+# memwatch - name the task behind a memory blow-up.
+#
+# Scope is deliberately narrow. CloudWatch already records % Memory Usage per
+# instance, and the cgroup ceilings already stop a runaway taking the host - and
+# the kernel logs the OOM kill with pid and RSS. What none of those provide is
+# WHICH TASK: every celery child is an identical `python3.14 -m celery worker`, so
+# the OOM message cannot tell the reconcile task from any other.
+#
+# That one missing piece - the Python stack - is the whole job here. Detection,
+# alerting and containment are handled elsewhere.
+#
+# Because containment is no longer this script's problem, it samples slowly. It
+# only has to catch the offender somewhere on its way to the cgroup ceiling, not
+# race a host into the ground.
+#
+# Output goes through logger to /var/log/messages -> CloudWatch /app/system/messages,
+# so the evidence leaves the box even if the box does not survive.
+
+set -u
+# 4 GB sits between the ~2.8 GB steady state of a healthy celery_worker cgroup and
+# its ~6.1 GB ceiling, so a dump lands on the way up without firing on normal load.
+THRESH_KB=${MEMWATCH_THRESHOLD_KB:-4000000}
+INTERVAL=${MEMWATCH_INTERVAL:-10}
+COOLDOWN=${MEMWATCH_COOLDOWN:-300}            # do not re-dump the same pid for 5 min
+PYSPY=/home/pivotal/.venv/bin/py-spy
+
+declare -A last_dump
+
+log() { logger -t memwatch -- "$*"; }
+
+log "started threshold=$((THRESH_KB/1024))MB interval=${INTERVAL}s"
+
+while :; do
+    while read -r pid rss comm; do
+        [ "${rss:-0}" -gt "$THRESH_KB" ] 2>/dev/null || continue
+
+        now=$(date +%s)
+        prev=${last_dump[$pid]:-0}
+        [ $((now - prev)) -lt "$COOLDOWN" ] && continue
+        last_dump[$pid]=$now
+
+        log "TRIPPED pid=$pid rss=$((rss/1024))MB comm=$comm"
+        ps -o args= -p "$pid" 2>/dev/null | cut -c1-300 | while read -r l; do log "  cmd: $l"; done
+
+        if [ -x "$PYSPY" ]; then
+            # --nonblocking: do not pause the target. A stop-the-world dump on a
+            # host already under memory pressure is its own hazard.
+            timeout 30 "$PYSPY" dump --pid "$pid" --nonblocking 2>&1 \
+                | head -60 | while read -r l; do log "  $l"; done
+        else
+            log "  py-spy not present at $PYSPY - stack unavailable"
+        fi
+
+        free -m 2>/dev/null | awk '/^Mem:/{print "mem total="$2" used="$3" avail="$7}' \
+            | while read -r l; do log "  $l"; done
+    done < <(ps -eo pid=,rss=,comm= --sort=-rss 2>/dev/null | head -20)
+
+    sleep "$INTERVAL"
+done
