@@ -2,9 +2,9 @@
 SHELL=/bin/sh
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 MAILTO=BACKEND_SUPPORT_EMAIL
-*/3 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/system_stats.py -a APP_NAME -c HOST_CLASS -u APP_USER
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c production
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c demo
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c beta
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c staging
-*/2 * * * * python3.13 -W ignore /usr/local/lib/python3.13/site-packages/infrastructure/utils/monitors/rabbitmq_stats.py -a APP_NAME -c gamma
+*/3 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.system_stats -a APP_NAME -c HOST_CLASS -u APP_USER
+*/2 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.rabbitmq_stats -a APP_NAME -c production
+*/2 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.rabbitmq_stats -a APP_NAME -c demo
+*/2 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.rabbitmq_stats -a APP_NAME -c beta
+*/2 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.rabbitmq_stats -a APP_NAME -c staging
+*/2 * * * * python3.14 -W ignore -m infrastructure.utils.monitors.rabbitmq_stats -a APP_NAME -c gamma
