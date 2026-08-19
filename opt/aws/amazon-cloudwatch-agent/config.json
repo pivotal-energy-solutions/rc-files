@@ -110,6 +110,12 @@
             "timezone": "UTC"
           },
           {
+            "file_path": "/var/log/django/memwatch.json",
+            "log_group_name": "/app/memwatch",
+            "log_stream_name": "HOST_CLASS",
+            "timezone": "UTC"
+          },
+          {
             "file_path": "/var/log/launch_host.log",
             "log_group_name": "/app/launch-host",
             "log_stream_name": "HOST_CLASS",
