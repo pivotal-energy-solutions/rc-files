@@ -25,6 +25,12 @@ INTERVAL=${MEMWATCH_INTERVAL:-10}
 COOLDOWN=${MEMWATCH_COOLDOWN:-300}            # do not re-dump the same pid for 5 min
 PYSPY=/home/pivotal/.venv/bin/py-spy
 
+# Structured alerting record. See memwatch-record for why this exists alongside
+# the plain logger output rather than replacing it. /var/log/django/*.json is
+# already covered by logrotate (rotate 7, maxsize 200M, copytruncate).
+RECORDER=/usr/local/bin/memwatch-record
+JSON_LOG=/var/log/django/memwatch.json
+
 declare -A last_dump
 
 log() { logger -t memwatch -- "$*"; }
@@ -40,20 +46,38 @@ while :; do
         [ $((now - prev)) -lt "$COOLDOWN" ] && continue
         last_dump[$pid]=$now
 
-        log "TRIPPED pid=$pid rss=$((rss/1024))MB comm=$comm"
-        ps -o args= -p "$pid" 2>/dev/null | cut -c1-300 | while read -r l; do log "  cmd: $l"; done
+        rss_mb=$((rss/1024))
+        log "TRIPPED pid=$pid rss=${rss_mb}MB comm=$comm"
+
+        cmdline=$(ps -o args= -p "$pid" 2>/dev/null | cut -c1-300)
+        [ -n "$cmdline" ] && log "  cmd: $cmdline"
 
         if [ -x "$PYSPY" ]; then
             # --nonblocking: do not pause the target. A stop-the-world dump on a
             # host already under memory pressure is its own hazard.
-            timeout 30 "$PYSPY" dump --pid "$pid" --nonblocking 2>&1 \
-                | head -60 | while read -r l; do log "  $l"; done
+            stack=$(timeout 30 "$PYSPY" dump --pid "$pid" --nonblocking 2>&1 | head -60)
         else
-            log "  py-spy not present at $PYSPY - stack unavailable"
+            stack="py-spy not present at $PYSPY - stack unavailable"
         fi
+        printf '%s\n' "$stack" | while read -r l; do log "  $l"; done
 
-        free -m 2>/dev/null | awk '/^Mem:/{print "mem total="$2" used="$3" avail="$7}' \
-            | while read -r l; do log "  $l"; done
+        meminfo=$(free -m 2>/dev/null | awk '/^Mem:/{print "total="$2" used="$3" avail="$7}')
+        [ -n "$meminfo" ] && log "  mem $meminfo"
+
+        # One structured record for alerting, in addition to the plain lines above.
+        # Those stay exactly as they were: they are the readable capture in
+        # /var/log/messages and what the CloudWatch Insights panel reads. This file
+        # ships to its own log group and is the only thing subscribed to Slack, so a
+        # capture posts as one card rather than forty messages.
+        if [ -x "$RECORDER" ]; then
+            [ -e "$JSON_LOG" ] || install -o APP_USER -g APP_GROUP -m 0644 \
+                /dev/null "$JSON_LOG" 2>/dev/null || :
+            printf '%s\n' "$stack" | "$RECORDER" \
+                --pid "$pid" --rss-mb "$rss_mb" --comm "$comm" \
+                --cmd "$cmdline" --mem "$meminfo" \
+                --threshold-mb "$((THRESH_KB/1024))" >>"$JSON_LOG" 2>/dev/null \
+                || log "  memwatch-record failed - no structured record written"
+        fi
     done < <(ps -eo pid=,rss=,comm= --sort=-rss 2>/dev/null | head -20)
 
     sleep "$INTERVAL"

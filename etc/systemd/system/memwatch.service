@@ -18,8 +18,13 @@ Environment=MEMWATCH_THRESHOLD_KB=4000000
 Environment=MEMWATCH_INTERVAL=10
 
 # This exists to diagnose memory exhaustion, so it must not contribute to it.
+#
+# 128M rather than 64M: a capture now also runs memwatch-record under the system
+# python3, and the interpreter plus py-spy dumping a multi-GB target shares this
+# cgroup. Being OOM-killed mid-capture would lose the very alert the capture
+# exists to raise, and 128M is still negligible against a 16GB host.
 MemoryAccounting=yes
-MemoryMax=64M
+MemoryMax=128M
 OOMPolicy=continue
 Nice=10
 

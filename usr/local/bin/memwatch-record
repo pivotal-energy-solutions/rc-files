@@ -1,0 +1,238 @@
+#!/usr/bin/python3
+"""memwatch-record - turn a memwatch capture into one structured log record.
+
+memwatch writes ~40 plain syslog lines per capture. That is right for
+/var/log/messages, where the whole stack should be readable in order, but it is
+the wrong shape for an alert: rsyslog wraps every line as its own JSON object
+with the text buried in `message`, so forty lines become forty Slack posts and
+none of them carry the fields that make a card useful.
+
+This emits a single line instead, shaped for the slack_notification Lambda's
+SlackMessage renderer, which already knows how to build a card with EC2 details,
+log details, a thread block and CloudWatch drill-in buttons - so no Lambda change
+is needed, only a record it can read.
+
+Reads the py-spy stack on stdin, takes the surrounding facts as arguments, and
+writes one JSON object to stdout. It is deliberately hard to kill: any parsing
+failure degrades a field rather than losing the record, because the record is the
+alert.
+
+Uses the system interpreter, not the app venv - a venv that is broken or
+mid-deploy is exactly when this needs to work.
+
+__author__ = "Steven K"
+__date__ = "08/19/26 12:40 PM"
+__copyright__ = "Copyright 2011-2026 Pivotal Energy Solutions. All rights reserved."
+__credits__ = ["Steven K"]
+"""
+
+import argparse
+import datetime
+import json
+import os
+import re
+import socket
+import sys
+
+#: HOST_CLASS is substituted when tensor-infrastructure writes this file to the
+#: host (infrastructure/server/base.py). It doubles as the Slack webhook key, so
+#: an unsubstituted value would route every alert to the general channel.
+HOST_CLASS = "HOST_CLASS"
+
+VALID_HOST_CLASSES = ("production", "beta", "gamma", "demo", "staging")
+
+#: py-spy dump frame, e.g. `    update_external_influencers (analytics/tasks.py:181)`
+FRAME_RE = re.compile(r"^\s+(?P<function>\S+)\s+\((?P<path>.+?):(?P<lineno>\d+)\)\s*$")
+
+#: Frames from these packages describe the machinery every celery child runs, not
+#: the task that is actually consuming memory. The topmost frame is often one of
+#: them, so attribution skips them and falls back only if nothing else is left.
+FRAMEWORK_PREFIXES = (
+    "celery", "kombu", "billiard", "amqp", "vine", "redis", "socket", "selectors",
+    "threading", "ssl", "asyncio", "concurrent", "queue", "logging", "traceback",
+)
+
+#: level_no gates the entire detail attachment in the Lambda:
+#: `if self.level_no <= SHOW_FIELDS_LEVEL_NO: return`, where that constant is 30.
+#: A literal syslog notice (5) would render a card with no EC2, log or thread
+#: details at all. level_name stays WARNING because that is what this is - a
+#: high-water mark crossed, not a failure - so the card is yellow, not red.
+LEVEL_NAME = "WARNING"
+LEVEL_NO = 40
+
+
+def utc_now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+def host_class():
+    """Fall back to the hostname prefix if the placeholder was never replaced."""
+    if HOST_CLASS in VALID_HOST_CLASSES:
+        return HOST_CLASS
+    prefix = socket.gethostname().split("-")[0].split(".")[0]
+    return prefix if prefix in VALID_HOST_CLASSES else "general"
+
+
+def instance_id():
+    """Best-effort IMDSv2. Never worth delaying or failing a capture over."""
+    try:
+        import urllib.request
+
+        token_request = urllib.request.Request(
+            "http://169.254.169.254/latest/api/token",
+            method="PUT",
+            headers={"X-aws-ec2-metadata-token-ttl-seconds": "60"},
+        )
+        token = urllib.request.urlopen(token_request, timeout=1).read().decode()
+        identity = urllib.request.Request(
+            "http://169.254.169.254/latest/meta-data/instance-id",
+            headers={"X-aws-ec2-metadata-token": token},
+        )
+        return urllib.request.urlopen(identity, timeout=1).read().decode().strip() or None
+    except Exception:
+        return None
+
+
+def parse_frames(stack):
+    frames = []
+    for line in stack.splitlines():
+        match = FRAME_RE.match(line)
+        if match:
+            frames.append(
+                {
+                    "function": match.group("function"),
+                    "path": match.group("path"),
+                    "lineno": int(match.group("lineno")),
+                }
+            )
+    return frames
+
+
+def module_for(path):
+    """`/opt/venv/lib/python3.14/site-packages/analytics/tasks.py` -> `analytics.tasks`."""
+    cleaned = path
+    for marker in ("site-packages/", "dist-packages/"):
+        if marker in cleaned:
+            cleaned = cleaned.split(marker, 1)[1]
+    cleaned = cleaned.lstrip("/")
+    if cleaned.endswith(".py"):
+        cleaned = cleaned[:-3]
+    return cleaned.replace("/", ".")
+
+
+def attribute(frames):
+    """The frame worth naming: the first that is not framework machinery."""
+    for frame in frames:
+        module = module_for(frame["path"])
+        if not module.split(".")[0] in FRAMEWORK_PREFIXES:
+            return frame, module
+    if frames:
+        return frames[0], module_for(frames[0]["path"])
+    return None, None
+
+
+def build_message(args, stack, frame, module):
+    """The card body. Basic message, not a synthesised exception."""
+    headline = "*%s at %sMB crossed the %sMB watermark*" % (
+        args.comm or "process",
+        args.rss_mb,
+        args.threshold_mb,
+    )
+    if frame is not None:
+        headline += "\n_%s_ in `%s`" % (frame["function"], module)
+
+    body = ["pid   %-8s rss %sMB   comm %s" % (args.pid, args.rss_mb, args.comm)]
+    if args.cmd:
+        body.append("cmd   %s" % args.cmd)
+    if stack.strip():
+        body.append("")
+        body.append(stack.strip())
+    if args.mem:
+        body.append("")
+        body.append("mem   %s" % args.mem)
+
+    detail = "\n".join(body)
+    # add_message_block truncates at 2999; leave room for the fence and headline.
+    budget = 2600 - len(headline)
+    if len(detail) > budget:
+        detail = detail[:budget] + "\n... truncated, full capture in CloudWatch"
+    return "%s\n\n```\n%s\n```" % (headline, detail)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pid", required=True)
+    parser.add_argument("--rss-mb", required=True)
+    parser.add_argument("--comm", default="")
+    parser.add_argument("--cmd", default="")
+    parser.add_argument("--mem", default="")
+    parser.add_argument("--threshold-mb", default="")
+    args = parser.parse_args()
+
+    stack = ""
+    try:
+        stack = sys.stdin.read()
+    except Exception:
+        pass
+
+    try:
+        frames = parse_frames(stack)
+        frame, module = attribute(frames)
+    except Exception:
+        frame, module = None, None
+
+    record = {
+        "timestamp": utc_now(),
+        "hostname": socket.gethostname(),
+        "host_class": host_class(),
+        "app": "axis",
+        "type": "memwatch",
+        "level_name": LEVEL_NAME,
+        "level_no": LEVEL_NO,
+        "name": "memwatch",
+        "source": "memwatch",
+        "message": build_message(args, stack, frame, module),
+        # Short and stable: the Lambda builds both CloudWatch buttons by
+        # searching this value, so it must not carry the pid or the RSS.
+        "msg": "memwatch watermark crossed",
+        "process": args.pid,
+        "process_name": args.comm or None,
+        "rss_mb": args.rss_mb,
+    }
+
+    identity = instance_id()
+    if identity:
+        record["instance_id"] = identity
+        record["autoscaling_group"] = record["host_class"]
+
+    if frame is not None:
+        record["function_name"] = frame["function"]
+        record["line_no"] = frame["lineno"]
+        record["path"] = frame["path"]
+        record["module"] = module
+
+    sys.stdout.write(json.dumps({k: v for k, v in record.items() if v is not None}) + "\n")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as err:  # never let a formatting bug swallow the alert
+        sys.stdout.write(
+            json.dumps(
+                {
+                    "timestamp": utc_now(),
+                    "hostname": socket.gethostname(),
+                    "host_class": host_class(),
+                    "level_name": "WARNING",
+                    "level_no": LEVEL_NO,
+                    "name": "memwatch",
+                    "source": "memwatch",
+                    "msg": "memwatch watermark crossed",
+                    "message": "memwatch capture could not be formatted: %r "
+                    "(full capture is in /app/system/messages)" % (err,),
+                }
+            )
+            + "\n"
+        )
+        os._exit(0)
