@@ -34,12 +34,18 @@ import re
 import socket
 import sys
 
-#: HOST_CLASS is substituted when tensor-infrastructure writes this file to the
-#: host (infrastructure/server/base.py). It doubles as the Slack webhook key, so
-#: an unsubstituted value would route every alert to the general channel.
-HOST_CLASS = "HOST_CLASS"
-
-VALID_HOST_CLASSES = ("production", "beta", "gamma", "demo", "staging")
+#: Derived from the hostname at runtime, never templated.
+#:
+#: pull_replace_and_write_rc_file substitutes tokens with a blind re.sub, so any
+#: occurrence of the class placeholder - including inside a longer identifier -
+#: is rewritten. A literal placeholder here produced `production = "production"`
+#: and `VALID_productionES`, which happened to still run but baked the *build*
+#: host's class into the AMI. Every environment launched from that image would
+#: then report the build class and post its alerts to that Slack channel.
+#:
+#: Hostnames are `<class>-<private-ip>`, so the class is always available locally
+#: and is correct per instance rather than per image.
+KNOWN_CLASSES = ("production", "beta", "gamma", "demo", "staging")
 
 #: py-spy dump frame, e.g. `    update_external_influencers (analytics/tasks.py:181)`
 FRAME_RE = re.compile(r"^\s+(?P<function>\S+)\s+\((?P<path>.+?):(?P<lineno>\d+)\)\s*$")
@@ -66,11 +72,9 @@ def utc_now():
 
 
 def host_class():
-    """Fall back to the hostname prefix if the placeholder was never replaced."""
-    if HOST_CLASS in VALID_HOST_CLASSES:
-        return HOST_CLASS
+    """The Slack webhook key, taken from the hostname (`<class>-<private-ip>`)."""
     prefix = socket.gethostname().split("-")[0].split(".")[0]
-    return prefix if prefix in VALID_HOST_CLASSES else "general"
+    return prefix if prefix in KNOWN_CLASSES else "general"
 
 
 def instance_id():
