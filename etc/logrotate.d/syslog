@@ -1,14 +1,26 @@
+# Only the paths RHEL's own rsyslog-logrotate package does NOT claim.
+#
+# That package ships /etc/logrotate.d/rsyslog covering cron, maillog, messages,
+# secure and spooler. This file used to list them too, from when the OS shipped
+# its rules as /etc/logrotate.d/syslog and there was no collision.
+#
+# logrotate treats a path appearing in two configs as a fatal error - it skips the
+# file and exits 1, which fails logrotate.service entirely. So nothing rotated on
+# any host, on any schedule:
+#
+#     error: syslog:1 duplicate log entry for /var/log/spooler
+#     error: found error in file syslog, skipping
+#     logrotate.service: Failed with result 'exit-code'
+#
+# On the rabbitmq host that let /var/log/django reach 19GB on a 40GB disk.
+#
+# Before adding a path here, check it is not already in /etc/logrotate.d/rsyslog.
 /var/log/kernel
 /var/log/kernel.log
-/var/log/cron
 /var/log/cron.log
-/var/log/maillog
 /var/log/maillog.log
-/var/log/messages
 /var/log/messages.log
-/var/log/secure
 /var/log/secure.log
-/var/log/spooler
 /var/log/spooler.log
 /var/log/boot
 /var/log/boot.log
