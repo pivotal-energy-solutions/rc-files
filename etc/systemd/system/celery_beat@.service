@@ -16,7 +16,14 @@ ExecStart=/bin/sh -c '/home/pivotal/.venv/bin/celery -A celeryapp beat \
 Restart=always
 
 # --- memory ceiling -------------------------------------------------------
-# scheduler only, holds no task payloads.
+# ~365MB measured. Beat is described as "scheduler only", which tempts a small
+# ceiling, but it loads the entire Django app - settings, models, the full
+# import graph - so it costs the same as any other Django process. 512M gave it
+# 1.4x headroom where every other unit here has 2.8x.
+#
+# This is the only ceiling that applies on the rabbitmq host: it runs five
+# celery_beat@ instances and no workers at all. 5x1G against 7552MB is 66%,
+# and measured total across all five is 1986MB.
 #
 # --max-memory-per-child is only evaluated BETWEEN tasks, so a single task that
 # never returns is never checked. On 2026-08-18 one child reached 6.6 GB - 11x
@@ -39,7 +46,7 @@ Restart=always
 # single child is killed. With continue, systemd leaves the unit running and
 # the celery parent respawns the child.
 MemoryAccounting=yes
-MemoryMax=512M
+MemoryMax=1G
 OOMPolicy=continue
 
 

@@ -11,3 +11,32 @@
   missingok
   su APP_USER APP_GROUP
 }
+
+# The *.json monitor and application logs were never covered by the rule above,
+# which matches *.log only. They are append-only and nothing truncates them, so
+# they grow without bound. On the rabbitmq host - which writes rabbitmq_stats for
+# every environment every two minutes - that reached 16GB on a 40GB disk at 74%
+# used, with rabbitmq_stats_production.json alone at 6.5GB. That host runs celery
+# beat for all five environments, so filling its disk stops every schedule.
+#
+# Rotated more aggressively than the .log rule: these are high-volume telemetry
+# already shipped to CloudWatch, so the local copy only needs to cover the window
+# between shipping and an operator looking at it.
+#
+# copytruncate rather than create: the monitors hold their file handle open for
+# the life of the process and never reopen, so a renamed file would keep being
+# written to and the new one would stay empty. The CloudWatch agent tracks by
+# inode and picks up the truncation cleanly.
+/var/log/django/*.json {
+  daily
+  rotate 7
+  size 200M
+  copytruncate
+  dateext
+  dateyesterday
+  compress
+  delaycompress
+  notifempty
+  missingok
+  su APP_USER APP_GROUP
+}
