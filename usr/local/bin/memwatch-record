@@ -232,10 +232,21 @@ def main():
         "level_no": LEVEL_NO,
         "name": "memwatch",
         "source": "memwatch",
+        # Rendered for Slack, so trimmed to the section limit. Truncation is a
+        # presentation concern and belongs here, not in what gets stored.
         "message": build_message(args, stack, frame, module),
         # Short and stable: the Lambda builds both CloudWatch buttons by
         # searching this value, so it must not carry the pid or the RSS.
         "msg": "memwatch watermark crossed",
+        # The complete capture, untrimmed. The Lambda never reads these - it only
+        # renders `message` - but they make this record self-contained in
+        # CloudWatch, so /app/memwatch can be read on its own rather than sending
+        # you to /app/system/messages to reassemble 60 separate syslog lines.
+        "stack": "\n".join(clean_stack(stack)) or None,
+        "stack_frames": len(clean_stack(stack)) or None,
+        "cmd": (args.cmd or "").strip() or None,
+        "mem": (args.mem or "").strip() or None,
+        "threshold_mb": args.threshold_mb or None,
         "process": args.pid,
         "process_name": args.comm or None,
         "rss_mb": args.rss_mb,
