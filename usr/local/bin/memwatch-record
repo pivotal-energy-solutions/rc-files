@@ -50,6 +50,19 @@ KNOWN_CLASSES = ("production", "beta", "gamma", "demo", "staging")
 #: py-spy dump frame, e.g. `    update_external_influencers (analytics/tasks.py:181)`
 FRAME_RE = re.compile(r"^\s+(?P<function>\S+)\s+\((?P<path>.+?):(?P<lineno>\d+)\)\s*$")
 
+#: py-spy prints the full command line and interpreter path before the frames.
+#: Both are already carried by --cmd, and together they cost ~700 characters of
+#: a 3000-character Slack section - which is why the frames, the part actually
+#: worth reading, were what got truncated. Dropped so the budget goes to the stack.
+PYSPY_PREAMBLE_RE = re.compile(r"^\s*(Process \d+:|Python v)")
+
+#: The command line is context, not payload: ~300 characters of celery flags that
+#: are identical on every worker. Enough to identify the queue is enough.
+CMD_DISPLAY_CHARS = 120
+
+#: add_message_block truncates at 2999. Leave headroom for the fence and headline.
+MESSAGE_BUDGET = 2600
+
 #: Frames from these packages describe the machinery every celery child runs, not
 #: the task that is actually consuming memory. The topmost frame is often one of
 #: them, so attribution skips them and falls back only if nothing else is left.
@@ -135,8 +148,22 @@ def attribute(frames):
     return None, None
 
 
+def clean_stack(stack):
+    """Drop py-spy's preamble; it duplicates --cmd and crowds out the frames."""
+    return [
+        line for line in stack.splitlines()
+        if line.strip() and not PYSPY_PREAMBLE_RE.match(line)
+    ]
+
+
 def build_message(args, stack, frame, module):
-    """The card body. Basic message, not a synthesised exception."""
+    """The card body. Basic message, not a synthesised exception.
+
+    The stack is the payload and the command line is context, so when the two
+    compete for the Slack section limit the command gives way first. Trimming is
+    done by whole frames rather than characters - a stack cut mid-identifier
+    reads as corruption, and the dropped count is more useful than the fragment.
+    """
     headline = "*%s at %sMB crossed the %sMB watermark*" % (
         args.comm or "process",
         args.rss_mb,
@@ -145,22 +172,32 @@ def build_message(args, stack, frame, module):
     if frame is not None:
         headline += "\n_%s_ in `%s`" % (frame["function"], module)
 
-    body = ["pid   %-8s rss %sMB   comm %s" % (args.pid, args.rss_mb, args.comm)]
+    head = ["pid   %-8s rss %sMB   comm %s" % (args.pid, args.rss_mb, args.comm)]
     if args.cmd:
-        body.append("cmd   %s" % args.cmd)
-    if stack.strip():
-        body.append("")
-        body.append(stack.strip())
-    if args.mem:
-        body.append("")
-        body.append("mem   %s" % args.mem)
+        cmd = args.cmd.strip()
+        if len(cmd) > CMD_DISPLAY_CHARS:
+            cmd = cmd[:CMD_DISPLAY_CHARS] + " ..."
+        head.append("cmd   %s" % cmd)
+    tail = ["", "mem   %s" % args.mem] if args.mem else []
 
-    detail = "\n".join(body)
-    # add_message_block truncates at 2999; leave room for the fence and headline.
-    budget = 2600 - len(headline)
-    if len(detail) > budget:
-        detail = detail[:budget] + "\n... truncated, full capture in CloudWatch"
-    return "%s\n\n```\n%s\n```" % (headline, detail)
+    fixed = len("\n".join(head + tail)) + len(headline) + 12  # +fence and blank lines
+    budget = MESSAGE_BUDGET - fixed
+
+    lines = clean_stack(stack)
+    kept, used = [], 0
+    for line in lines:
+        if used + len(line) + 1 > budget:
+            break
+        kept.append(line)
+        used += len(line) + 1
+
+    dropped = len(lines) - len(kept)
+    if dropped:
+        kept.append("... %d more frame%s, full capture in CloudWatch"
+                    % (dropped, "" if dropped == 1 else "s"))
+
+    body = head + ([""] + kept if kept else []) + tail
+    return "%s\n\n```\n%s\n```" % (headline, "\n".join(body))
 
 
 def main():
@@ -195,10 +232,21 @@ def main():
         "level_no": LEVEL_NO,
         "name": "memwatch",
         "source": "memwatch",
+        # Rendered for Slack, so trimmed to the section limit. Truncation is a
+        # presentation concern and belongs here, not in what gets stored.
         "message": build_message(args, stack, frame, module),
         # Short and stable: the Lambda builds both CloudWatch buttons by
         # searching this value, so it must not carry the pid or the RSS.
         "msg": "memwatch watermark crossed",
+        # The complete capture, untrimmed. The Lambda never reads these - it only
+        # renders `message` - but they make this record self-contained in
+        # CloudWatch, so /app/memwatch can be read on its own rather than sending
+        # you to /app/system/messages to reassemble 60 separate syslog lines.
+        "stack": "\n".join(clean_stack(stack)) or None,
+        "stack_frames": len(clean_stack(stack)) or None,
+        "cmd": (args.cmd or "").strip() or None,
+        "mem": (args.mem or "").strip() or None,
+        "threshold_mb": args.threshold_mb or None,
         "process": args.pid,
         "process_name": args.comm or None,
         "rss_mb": args.rss_mb,
